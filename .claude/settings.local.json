@@ -12,7 +12,18 @@
       "Bash(npm run check-all:*)",
       "Bash(prettier:*)",
       "Bash(npx prettier:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(gh run list:*)",
+      "Bash(gh run view:*)",
+      "Bash(gh pr:*)",
+      "Bash(gh api:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(git reset:*)",
+      "Bash(rm:*)",
+      "Bash(git checkout:*)"
     ],
     "deny": []
   }
