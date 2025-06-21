@@ -4,39 +4,50 @@ on:
   pull_request:
     types:
       - labeled
-      - synchronize
       - opened
-      - edited
-      - ready_for_review
-  pull_request_review:
+      - reopened
+  pull_request_target:
     types:
-      - submitted
-  check_suite:
-    types:
-      - completed
-  status: {}
+      - labeled
+      - opened
+      - reopened
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  auto-merge:
+  auto-merge-dependabot:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: '${{ secrets.GITHUB_TOKEN }}'
+
+      - name: Auto-approve Dependabot PRs
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+  auto-merge-labeled:
     runs-on: ubuntu-latest
     if: |
       github.event.pull_request.draft == false &&
-      (github.event.pull_request.user.login == 'dependabot[bot]' ||
-       contains(github.event.pull_request.labels.*.name, 'automerge'))
+      contains(github.event.pull_request.labels.*.name, 'automerge') &&
+      !contains(github.event.pull_request.labels.*.name, 'do-not-merge')
     steps:
-      - name: Auto merge
-        uses: pascalgn/merge-action@v0.15.6
+      - name: Enable auto-merge for labeled PRs
+        run: gh pr merge --auto --squash "$PR_URL"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_LABELS: 'automerge,!do-not-merge'
-          MERGE_METHOD: 'squash'
-          MERGE_COMMIT_MESSAGE: 'pull-request-title'
-          MERGE_DELETE_BRANCH: 'true'
-          MERGE_RETRIES: '6'
-          MERGE_RETRY_SLEEP: '10000'
-          UPDATE_LABELS: ''
-          UPDATE_METHOD: 'merge'
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
