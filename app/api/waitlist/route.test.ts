@@ -3,6 +3,11 @@ import { NextRequest } from 'next/server'
 import { POST } from './route'
 import type { CloudflareEnv } from '@/types/cloudflare'
 
+// Mock the getCloudflareContext function
+vi.mock('@opennextjs/cloudflare', () => ({
+  getCloudflareContext: vi.fn(),
+}))
+
 // Mock KV namespace
 const mockKV = {
   put: vi.fn(),
@@ -12,9 +17,12 @@ const mockKV = {
   getWithMetadata: vi.fn(),
 }
 
-// Mock request with Cloudflare bindings
+// Import getCloudflareContext to get proper typing
+import { getCloudflareContext } from '@opennextjs/cloudflare'
+
+// Mock request
 const createMockRequest = (body: unknown) => {
-  const request = new Request('http://localhost:3000/api/waitlist', {
+  return new Request('http://localhost:3000/api/waitlist', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -22,18 +30,24 @@ const createMockRequest = (body: unknown) => {
     },
     body: JSON.stringify(body),
   }) as unknown as NextRequest
-
-  // Add Cloudflare env to request
-  ;(request as unknown as { env: CloudflareEnv }).env = {
-    WAITLIST_KV: mockKV,
-  } as CloudflareEnv
-
-  return request
 }
 
 describe('Waitlist API Route', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+
+    // Mock getCloudflareContext to return our mock KV
+    const mockGetCloudflareContext = vi.mocked(getCloudflareContext)
+    mockGetCloudflareContext.mockReturnValue({
+      env: {
+        WAITLIST_KV: mockKV,
+      } as CloudflareEnv,
+      cf: {},
+      ctx: {
+        waitUntil: vi.fn(),
+        passThroughOnException: vi.fn(),
+      },
+    } as ReturnType<typeof getCloudflareContext>)
   })
 
   describe('POST /api/waitlist', () => {
@@ -125,10 +139,9 @@ describe('Waitlist API Route', () => {
           'CF-Connecting-IP': ip,
         },
         body: JSON.stringify({ email }),
-      })
-      ;(request as unknown as { env: CloudflareEnv }).env = { WAITLIST_KV: mockKV } as CloudflareEnv
+      }) as unknown as NextRequest
 
-      const response = await POST(request as NextRequest)
+      const response = await POST(request)
 
       expect(response.status).toBe(429)
       const data = (await response.json()) as { error: string }
@@ -156,10 +169,9 @@ describe('Waitlist API Route', () => {
           'User-Agent': userAgent,
         },
         body: JSON.stringify({ email }),
-      })
-      ;(request as unknown as { env: CloudflareEnv }).env = { WAITLIST_KV: mockKV } as CloudflareEnv
+      }) as unknown as NextRequest
 
-      const response = await POST(request as NextRequest)
+      const response = await POST(request)
 
       expect(response.status).toBe(200)
       expect(mockKV.put).toHaveBeenCalledWith(
@@ -205,10 +217,9 @@ describe('Waitlist API Route', () => {
           'Content-Type': 'text/plain',
         },
         body: 'not json',
-      })
-      ;(request as unknown as { env: CloudflareEnv }).env = { WAITLIST_KV: mockKV } as CloudflareEnv
+      }) as unknown as NextRequest
 
-      const response = await POST(request as NextRequest)
+      const response = await POST(request)
 
       expect(response.status).toBe(400)
       const data = (await response.json()) as { error: string }
@@ -221,10 +232,9 @@ describe('Waitlist API Route', () => {
         headers: {
           'Content-Type': 'application/json',
         },
-      })
-      ;(request as unknown as { env: CloudflareEnv }).env = { WAITLIST_KV: mockKV } as CloudflareEnv
+      }) as unknown as NextRequest
 
-      const response = await POST(request as NextRequest)
+      const response = await POST(request)
 
       expect(response.status).toBe(400)
       const data = (await response.json()) as { error: string }
@@ -248,6 +258,39 @@ describe('Waitlist API Route', () => {
         expect.stringContaining(normalizedEmail),
         expect.anything()
       )
+    })
+
+    it('handles missing Cloudflare context gracefully', async () => {
+      const mockGetCloudflareContext = vi.mocked(getCloudflareContext)
+      mockGetCloudflareContext.mockReturnValueOnce({
+        env: {} as CloudflareEnv, // No WAITLIST_KV
+        cf: {},
+        ctx: {
+          waitUntil: vi.fn(),
+          passThroughOnException: vi.fn(),
+        },
+      } as ReturnType<typeof getCloudflareContext>)
+
+      const request = createMockRequest({ email: 'test@example.com' })
+      const response = await POST(request)
+
+      expect(response.status).toBe(500)
+      const data = (await response.json()) as { error: string }
+      expect(data.error).toBe('Internal server error')
+    })
+
+    it('handles getCloudflareContext throwing error', async () => {
+      const mockGetCloudflareContext = vi.mocked(getCloudflareContext)
+      mockGetCloudflareContext.mockImplementationOnce(() => {
+        throw new Error('Context not available')
+      })
+
+      const request = createMockRequest({ email: 'test@example.com' })
+      const response = await POST(request)
+
+      expect(response.status).toBe(500)
+      const data = (await response.json()) as { error: string }
+      expect(data.error).toBe('Internal server error')
     })
   })
 })

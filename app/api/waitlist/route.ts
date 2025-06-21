@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getCloudflareContext } from '@opennextjs/cloudflare'
 import type { CloudflareEnv, WaitlistEntry } from '@/types/cloudflare'
 
 // Email validation regex
@@ -10,8 +11,9 @@ const RATE_LIMIT_MAX_ATTEMPTS = 3
 
 export async function POST(request: NextRequest) {
   try {
-    // Get Cloudflare bindings from request
-    const env = (request as unknown as { env: CloudflareEnv }).env
+    // Get Cloudflare bindings
+    const context = getCloudflareContext()
+    const env = context.env as CloudflareEnv
 
     if (!env?.WAITLIST_KV) {
       console.error('KV namespace not available')
