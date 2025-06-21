@@ -1,0 +1,42 @@
+name: Auto Merge
+
+on:
+  pull_request:
+    types:
+      - labeled
+      - synchronize
+      - opened
+      - edited
+      - ready_for_review
+  pull_request_review:
+    types:
+      - submitted
+  check_suite:
+    types:
+      - completed
+  status: {}
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.draft == false &&
+      (github.event.pull_request.user.login == 'dependabot[bot]' ||
+       contains(github.event.pull_request.labels.*.name, 'automerge'))
+    steps:
+      - name: Auto merge
+        uses: pascalgn/merge-action@v0.15.6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_LABELS: 'automerge,!do-not-merge'
+          MERGE_METHOD: 'squash'
+          MERGE_COMMIT_MESSAGE: 'pull-request-title'
+          MERGE_DELETE_BRANCH: 'true'
+          MERGE_RETRIES: '6'
+          MERGE_RETRY_SLEEP: '10000'
+          UPDATE_LABELS: ''
+          UPDATE_METHOD: 'merge'

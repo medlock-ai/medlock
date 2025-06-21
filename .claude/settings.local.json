@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:developers.cloudflare.com)",
+      "Bash(find:*)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run test:ci:*)",
+      "Bash(npx husky init:*)",
+      "Bash(ls:*)",
+      "Bash(npm run format:*)",
+      "Bash(npm run check-all:*)",
+      "Bash(prettier:*)",
+      "Bash(npx prettier:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": []
+  }
+}
