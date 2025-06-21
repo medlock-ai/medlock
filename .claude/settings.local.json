@@ -23,7 +23,12 @@
       "Bash(git stash:*)",
       "Bash(git reset:*)",
       "Bash(rm:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(gh run watch:*)",
+      "Bash(gh run cancel:*)",
+      "Bash(npm run build:next:*)",
+      "Bash(timeout 30 npm run build)",
+      "Bash(npm run build:*)"
     ],
     "deny": []
   }
