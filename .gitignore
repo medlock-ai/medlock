@@ -35,9 +35,14 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# OpenNext
-/.open-next
+# Cloudflare
+.wrangler/
+.open-next/
+.dev.vars
 
-# wrangler files
-.wrangler
-.dev.vars*
+# IDE
+.vscode/
+.idea/
+
+# Claude
+.claude/
