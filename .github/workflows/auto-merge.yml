@@ -3,44 +3,27 @@ name: Auto Merge
 on:
   pull_request:
     types:
-      - labeled
       - opened
       - reopened
+      - synchronize
   pull_request_target:
     types:
-      - labeled
       - opened
       - reopened
+      - synchronize
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  auto-merge-dependabot:
-    runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]'
-    steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@v2
-        with:
-          github-token: '${{ secrets.GITHUB_TOKEN }}'
-
-      - name: Enable auto-merge for Dependabot PRs
-        run: gh pr merge --auto --squash "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-  auto-merge-labeled:
+  auto-merge-all:
     runs-on: ubuntu-latest
     if: |
       github.event.pull_request.draft == false &&
-      contains(github.event.pull_request.labels.*.name, 'automerge') &&
       !contains(github.event.pull_request.labels.*.name, 'do-not-merge')
     steps:
-      - name: Enable auto-merge for labeled PRs
+      - name: Enable auto-merge for all PRs
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{github.event.pull_request.html_url}}

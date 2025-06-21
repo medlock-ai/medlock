@@ -28,7 +28,26 @@
       "Bash(gh run cancel:*)",
       "Bash(npm run build:next:*)",
       "Bash(timeout 30 npm run build)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(gh label create:*)",
+      "Bash(gh workflow run:*)",
+      "Bash(-f 'required_status_checks[strict]=true' )",
+      "Bash(-f 'required_status_checks[contexts][]=Test, Lint, and Type Check' )",
+      "Bash(-f 'enforce_admins=false' )",
+      "Bash(-f 'required_pull_request_reviews=null' )",
+      "Bash(-f 'restrictions=null' )",
+      "Bash(-f 'allow_force_pushes=false' )",
+      "Bash(-f 'allow_deletions=false' )",
+      "Bash(-f 'required_linear_history=false' )",
+      "Bash(-f 'allow_squash_merge=true' )",
+      "Bash(-f 'allow_merge_commit=false' )",
+      "Bash(-f 'allow_rebase_merge=false')",
+      "Bash(--method PUT )",
+      "Bash(--input /tmp/branch-protection.json)",
+      "Bash(--method PATCH )",
+      "Bash(--field strict=true )",
+      "Bash(--field 'contexts[]=Test, Lint, and Type Check' )",
+      "Bash(--field 'contexts[]=Workers Builds: healthmcp')"
     ],
     "deny": []
   }
