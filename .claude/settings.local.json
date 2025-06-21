@@ -85,7 +85,8 @@
       "Bash(npx tsc:*)",
       "Bash(sed:*)",
       "Bash(npm run type-check:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(yarn typecheck)"
     ],
     "deny": []
   }
