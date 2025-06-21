@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/cloudflare/workspaces/v0.0.8/workspaces.schema.json",
+  "projects": {
+    "site": {
+      "path": ".",
+      "config": "wrangler.jsonc",
+      "description": "HealthMCP marketing site (Next.js with OpenNext)"
+    },
+    "mcp": {
+      "path": "apps/mcp",
+      "config": "apps/mcp/wrangler.jsonc",
+      "description": "HealthMCP Model Context Protocol server"
+    }
+  }
+}

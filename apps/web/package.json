@@ -1,0 +1,53 @@
+{
+  "name": "@healthmcp/web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:ci": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "opennextjs-cloudflare": "opennextjs-cloudflare",
+    "build:cloudflare": "next build && opennextjs-cloudflare build",
+    "deploy": "opennextjs-cloudflare deploy",
+    "preview": "opennextjs-cloudflare preview"
+  },
+  "dependencies": {
+    "@opennextjs/cloudflare": "^1.3.1",
+    "next": "15.3.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "styled-jsx": "^5.1.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.0.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^24.0.3",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.5.2",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.4",
+    "eslint-config-prettier": "^10.1.5",
+    "jsdom": "^26.1.0",
+    "postcss": "^8",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vite": "^5.0.0",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.19.1"
+  }
+}

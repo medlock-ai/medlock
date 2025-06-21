@@ -1,0 +1,48 @@
+{
+  "name": "@healthmcp/mcp",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev -c wrangler.jsonc",
+    "build": "echo 'Building MCP Server - No compilation required for Workers'",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:ci": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "deploy": "wrangler deploy -c wrangler.jsonc --env=''",
+    "deploy:staging": "wrangler deploy -c wrangler.jsonc --env staging",
+    "tail": "wrangler tail -c wrangler.jsonc"
+  },
+  "dependencies": {
+    "@cloudflare/ai": "^1.2.2",
+    "@cloudflare/workers-oauth-provider": "^0.0.5",
+    "agents": "latest",
+    "hono": "^4.4.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.8.43",
+    "@cloudflare/workers-types": "^4.20241205.0",
+    "@types/node": "^20.11.5",
+    "@typescript-eslint/eslint-plugin": "^8.20.0",
+    "@typescript-eslint/parser": "^8.20.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/runner": "^3.2.4",
+    "@vitest/snapshot": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "eslint": "^9.17.0",
+    "prettier": "^3.5.3",
+    "react": "^19.0.0",
+    "typescript": "^5.6.3",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.20.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

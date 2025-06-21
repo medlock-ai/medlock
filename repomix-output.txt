@@ -1,0 +1,2278 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+================================================================
+File Summary
+================================================================
+
+Purpose:
+--------
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+
+File Format:
+------------
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Multiple file entries, each consisting of:
+  a. A separator line (================)
+  b. The file path (File: path/to/file)
+  c. Another separator line
+  d. The full contents of the file
+  e. A blank line
+
+Usage Guidelines:
+-----------------
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+
+Notes:
+------
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+
+Additional Info:
+----------------
+
+================================================================
+Directory Structure
+================================================================
+.github/
+  workflows/
+    auto-merge.yml
+    ci.yml
+  dependabot.yml
+.husky/
+  pre-commit
+app/
+  api/
+    waitlist/
+      route.test.ts
+      route.ts
+  globals.css
+  layout.tsx
+  page.test.tsx
+  page.tsx
+hooks/
+  useIntersectionObserver.ts
+  useParallax.ts
+  useTypewriter.ts
+public/
+  _headers
+  file.svg
+  globe.svg
+  next.svg
+  vercel.svg
+  window.svg
+test/
+  utils/
+    mockIntersectionObserver.ts
+    mockViewTransitions.ts
+  setup.ts
+types/
+  cloudflare.ts
+.gitignore
+.prettierignore
+.prettierrc.json
+.repomixignore
+eslint.config.mjs
+next.config.ts
+open-next.config.ts
+package.json
+postcss.config.mjs
+README.md
+tsconfig.json
+vitest.config.ts
+wrangler.jsonc
+
+================================================================
+Files
+================================================================
+
+================
+File: .github/workflows/auto-merge.yml
+================
+name: Auto Merge
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge-all:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.pull_request.draft == false &&
+      !contains(github.event.pull_request.labels.*.name, 'do-not-merge')
+    steps:
+      - name: Enable auto-merge for all PRs
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+================
+File: .github/workflows/ci.yml
+================
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  test:
+    name: Test, Lint, and Type Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run type checking
+        run: npm run typecheck
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Run tests with coverage
+        run: npm run test:ci
+
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+
+================
+File: .github/dependabot.yml
+================
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '04:00'
+    open-pull-requests-limit: 10
+    target-branch: 'main'
+    labels:
+      - 'dependencies'
+      - 'automerge'
+    groups:
+      development-dependencies:
+        dependency-type: 'development'
+        patterns:
+          - '*'
+      production-dependencies:
+        dependency-type: 'production'
+        patterns:
+          - '*'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '04:00'
+    labels:
+      - 'github-actions'
+      - 'automerge'
+
+================
+File: .husky/pre-commit
+================
+npx lint-staged
+
+================
+File: app/api/waitlist/route.test.ts
+================
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { NextRequest } from 'next/server'
+import { POST } from './route'
+import type { CloudflareEnv } from '@/types/cloudflare'
+
+// Mock KV namespace
+const mockKV = {
+  put: vi.fn(),
+  get: vi.fn(),
+  delete: vi.fn(),
+  list: vi.fn(),
+  getWithMetadata: vi.fn(),
+}
+
+// Mock request with Cloudflare bindings
+const createMockRequest = (body: unknown) => {
+  const request = new Request('http://localhost:3000/api/waitlist', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'CF-Connecting-IP': '127.0.0.1',
+    },
+    body: JSON.stringify(body),
+  }) as unknown as NextRequest
+
+  // Add Cloudflare env to request
+  ;(request as unknown as { env: CloudflareEnv }).env = {
+    WAITLIST_KV: mockKV,
+  } as CloudflareEnv
+
+  return request
+}
+
+describe('Waitlist API Route', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  describe('POST /api/waitlist', () => {
+    it('validates email format', async () => {
+      const invalidEmails = [
+        '',
+        'notanemail',
+        'missing@domain',
+        '@nodomain.com',
+        'spaces in@email.com',
+      ]
+
+      for (const email of invalidEmails) {
+        const request = createMockRequest({ email })
+        const response = await POST(request)
+
+        expect(response.status).toBe(400)
+        const data = (await response.json()) as { error: string }
+        expect(data.error).toMatch(/invalid email/i)
+        expect(mockKV.put).not.toHaveBeenCalled()
+      }
+    })
+
+    it('successfully adds new email to waitlist', async () => {
+      const email = 'test@example.com'
+      mockKV.get.mockResolvedValueOnce(null) // Email doesn't exist
+      mockKV.put.mockResolvedValueOnce(undefined)
+
+      const request = createMockRequest({ email })
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      const data = (await response.json()) as { success: boolean; message: string }
+      expect(data.success).toBe(true)
+      expect(data.message).toMatch(/added to waitlist/i)
+
+      // Verify KV operations
+      expect(mockKV.get).toHaveBeenCalledWith(`waitlist:${email}`)
+      expect(mockKV.put).toHaveBeenCalledWith(
+        `waitlist:${email}`,
+        expect.stringContaining(email),
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            timestamp: expect.any(Number),
+            ip: '127.0.0.1',
+          }),
+        })
+      )
+    })
+
+    it('prevents duplicate email submissions', async () => {
+      const email = 'existing@example.com'
+      mockKV.get.mockImplementation((key: string) => {
+        if (key === `waitlist:${email}`) {
+          return Promise.resolve('existing-data') // Email exists
+        }
+        return Promise.resolve(null)
+      })
+
+      const request = createMockRequest({ email })
+      const response = await POST(request)
+
+      expect(response.status).toBe(409)
+      const data = (await response.json()) as { error: string }
+      expect(data.error).toMatch(/already registered/i)
+      expect(mockKV.put).not.toHaveBeenCalledWith(
+        expect.stringContaining('waitlist:'),
+        expect.anything(),
+        expect.anything()
+      )
+    })
+
+    it('implements rate limiting per IP', async () => {
+      const email = 'ratelimit@example.com'
+      const ip = '192.168.1.1'
+
+      // Mock rate limit check
+      mockKV.get.mockImplementation((key: string) => {
+        if (key.startsWith('ratelimit:')) {
+          return Promise.resolve('5') // 5 attempts already
+        }
+        return Promise.resolve(null)
+      })
+
+      const request = new Request('http://localhost:3000/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'CF-Connecting-IP': ip,
+        },
+        body: JSON.stringify({ email }),
+      })
+      ;(request as unknown as { env: CloudflareEnv }).env = { WAITLIST_KV: mockKV } as CloudflareEnv
+
+      const response = await POST(request as NextRequest)
+
+      expect(response.status).toBe(429)
+      const data = (await response.json()) as { error: string }
+      expect(data.error).toMatch(/rate limit/i)
+      expect(mockKV.put).not.toHaveBeenCalledWith(
+        expect.stringContaining('waitlist:'),
+        expect.anything(),
+        expect.anything()
+      )
+    })
+
+    it('stores metadata with submission', async () => {
+      const email = 'metadata@example.com'
+      const ip = '10.0.0.1'
+      const userAgent = 'Mozilla/5.0 Test Browser'
+
+      mockKV.get.mockResolvedValueOnce(null)
+      mockKV.put.mockResolvedValueOnce(undefined)
+
+      const request = new Request('http://localhost:3000/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'CF-Connecting-IP': ip,
+          'User-Agent': userAgent,
+        },
+        body: JSON.stringify({ email }),
+      })
+      ;(request as unknown as { env: CloudflareEnv }).env = { WAITLIST_KV: mockKV } as CloudflareEnv
+
+      const response = await POST(request as NextRequest)
+
+      expect(response.status).toBe(200)
+      expect(mockKV.put).toHaveBeenCalledWith(
+        `waitlist:${email}`,
+        expect.stringContaining(email),
+        expect.objectContaining({
+          metadata: expect.objectContaining({
+            timestamp: expect.any(Number),
+            ip,
+          }),
+        })
+      )
+    })
+
+    it('handles KV storage errors gracefully', async () => {
+      const email = 'error@example.com'
+      mockKV.get.mockRejectedValueOnce(new Error('KV connection error'))
+
+      const request = createMockRequest({ email })
+      const response = await POST(request)
+
+      expect(response.status).toBe(500)
+      const data = (await response.json()) as { error: string }
+      expect(data.error).toMatch(/internal server error/i)
+    })
+
+    it('implements CORS headers', async () => {
+      const request = createMockRequest({ email: 'cors@example.com' })
+      mockKV.get.mockResolvedValueOnce(null)
+      mockKV.put.mockResolvedValueOnce(undefined)
+
+      const response = await POST(request)
+
+      expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*')
+      expect(response.headers.get('Access-Control-Allow-Methods')).toContain('POST')
+      expect(response.headers.get('Content-Type')).toBe('application/json')
+    })
+
+    it('validates request content type', async () => {
+      const request = new Request('http://localhost:3000/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+        body: 'not json',
+      })
+      ;(request as unknown as { env: CloudflareEnv }).env = { WAITLIST_KV: mockKV } as CloudflareEnv
+
+      const response = await POST(request as NextRequest)
+
+      expect(response.status).toBe(400)
+      const data = (await response.json()) as { error: string }
+      expect(data.error).toMatch(/invalid content type/i)
+    })
+
+    it('handles missing request body', async () => {
+      const request = new Request('http://localhost:3000/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      ;(request as unknown as { env: CloudflareEnv }).env = { WAITLIST_KV: mockKV } as CloudflareEnv
+
+      const response = await POST(request as NextRequest)
+
+      expect(response.status).toBe(400)
+      const data = (await response.json()) as { error: string }
+      expect(data.error).toMatch(/request body required/i)
+    })
+
+    it('trims and normalizes email addresses', async () => {
+      const email = '  TEST@EXAMPLE.COM  '
+      const normalizedEmail = 'test@example.com'
+
+      mockKV.get.mockResolvedValueOnce(null)
+      mockKV.put.mockResolvedValueOnce(undefined)
+
+      const request = createMockRequest({ email })
+      const response = await POST(request)
+
+      expect(response.status).toBe(200)
+      expect(mockKV.get).toHaveBeenCalledWith(`waitlist:${normalizedEmail}`)
+      expect(mockKV.put).toHaveBeenCalledWith(
+        `waitlist:${normalizedEmail}`,
+        expect.stringContaining(normalizedEmail),
+        expect.anything()
+      )
+    })
+  })
+})
+
+================
+File: app/api/waitlist/route.ts
+================
+import { NextRequest, NextResponse } from 'next/server'
+import type { CloudflareEnv, WaitlistEntry } from '@/types/cloudflare'
+
+// Email validation regex
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+// Rate limit settings
+const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minute
+const RATE_LIMIT_MAX_ATTEMPTS = 3
+
+export async function POST(request: NextRequest) {
+  try {
+    // Get Cloudflare bindings from request
+    const env = (request as unknown as { env: CloudflareEnv }).env
+
+    if (!env?.WAITLIST_KV) {
+      console.error('KV namespace not available')
+      return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    }
+
+    // Validate content type
+    const contentType = request.headers.get('content-type')
+    if (!contentType?.includes('application/json')) {
+      return NextResponse.json(
+        { error: 'Invalid content type' },
+        {
+          status: 400,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+    }
+
+    // Parse request body
+    let body
+    try {
+      const text = await request.text()
+      if (!text) {
+        return NextResponse.json(
+          { error: 'Request body required' },
+          {
+            status: 400,
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'POST, OPTIONS',
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+      }
+      body = JSON.parse(text)
+    } catch {
+      return NextResponse.json(
+        { error: 'Invalid JSON' },
+        {
+          status: 400,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+    }
+
+    // Validate email
+    const email = body.email?.trim().toLowerCase()
+    if (!email || !EMAIL_REGEX.test(email)) {
+      return NextResponse.json(
+        { error: 'Invalid email address' },
+        {
+          status: 400,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+    }
+
+    // Get client IP
+    const ip =
+      request.headers.get('CF-Connecting-IP') ||
+      request.headers.get('X-Forwarded-For') ||
+      '127.0.0.1'
+
+    // Check rate limit
+    const rateLimitKey = `ratelimit:${ip}`
+    const rateLimitData = await env.WAITLIST_KV.get(rateLimitKey)
+
+    if (rateLimitData) {
+      const attempts = parseInt(rateLimitData)
+      if (attempts >= RATE_LIMIT_MAX_ATTEMPTS) {
+        return NextResponse.json(
+          { error: 'Rate limit exceeded. Please wait before trying again' },
+          {
+            status: 429,
+            headers: {
+              'Access-Control-Allow-Origin': '*',
+              'Access-Control-Allow-Methods': 'POST, OPTIONS',
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+      }
+    }
+
+    // Check if email already exists
+    const existingEntry = await env.WAITLIST_KV.get(`waitlist:${email}`)
+    if (existingEntry) {
+      return NextResponse.json(
+        { error: 'Email already registered on waitlist' },
+        {
+          status: 409,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+    }
+
+    // Prepare entry data
+    const timestamp = Date.now()
+    const userAgent = request.headers.get('User-Agent') || undefined
+
+    const entry: WaitlistEntry = {
+      email,
+      timestamp,
+      ip,
+      userAgent,
+      source: 'website',
+    }
+
+    // Store in KV
+    await env.WAITLIST_KV.put(`waitlist:${email}`, JSON.stringify(entry), {
+      metadata: {
+        timestamp,
+        ip,
+      },
+    })
+
+    // Update rate limit
+    const currentAttempts = rateLimitData ? parseInt(rateLimitData) + 1 : 1
+    await env.WAITLIST_KV.put(rateLimitKey, currentAttempts.toString(), {
+      expirationTtl: Math.floor(RATE_LIMIT_WINDOW / 1000),
+    })
+
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'Successfully added to waitlist',
+      },
+      {
+        status: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+  } catch (error) {
+    console.error('Waitlist error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      {
+        status: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Content-Type': 'application/json',
+        },
+      }
+    )
+  }
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  })
+}
+
+================
+File: app/globals.css
+================
+@import 'tailwindcss';
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-space-grotesk: var(--font-space-grotesk);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+================
+File: app/layout.tsx
+================
+import type { Metadata } from 'next'
+import { Inter, Space_Grotesk } from 'next/font/google'
+import './globals.css'
+
+const inter = Inter({
+  variable: '--font-inter',
+  subsets: ['latin'],
+})
+
+const spaceGrotesk = Space_Grotesk({
+  variable: '--font-space-grotesk',
+  subsets: ['latin'],
+})
+
+export const metadata: Metadata = {
+  title: 'HealthMCP • AI Insights, Data Still Yours',
+  description:
+    'Unlock AI insights without unlocking your private health data. HealthMCP lets you team up your favourite AI model with your health records on your terms.',
+}
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode
+}>) {
+  return (
+    <html lang="en">
+      <body className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}>{children}</body>
+    </html>
+  )
+}
+
+================
+File: app/page.test.tsx
+================
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import HomePage from './page'
+import { mockIntersectionObserver } from '@/test/utils/mockIntersectionObserver'
+import { mockViewTransitionsAPI } from '@/test/utils/mockViewTransitions'
+
+// Mock Next.js router
+vi.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    prefetch: vi.fn(),
+  }),
+}))
+
+// Mock Cloudflare KV binding
+// const mockKV = {
+//   put: vi.fn(),
+//   get: vi.fn(),
+//   delete: vi.fn(),
+//   list: vi.fn(),
+// };
+
+// Mock fetch for form submission
+global.fetch = vi.fn()
+
+describe('HomePage', () => {
+  beforeEach(() => {
+    mockIntersectionObserver()
+    mockViewTransitionsAPI()
+    vi.clearAllMocks()
+    // Mock matchMedia for reduced motion tests
+    window.matchMedia = vi.fn().mockImplementation((query) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    }))
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  describe('Hero Section', () => {
+    it('renders the main headline with gradient animation', () => {
+      render(<HomePage />)
+      const headline = screen.getByRole('heading', { level: 1 })
+      expect(headline).toBeInTheDocument()
+      expect(headline).toHaveTextContent(/Unlock AI insights/i)
+      expect(headline).toHaveTextContent(/without unlocking/i)
+      expect(headline).toHaveTextContent(/your private health data/i)
+
+      // Check for gradient classes
+      expect(headline).toHaveClass('animate-gradient-flow')
+      expect(headline).toHaveStyle({
+        backgroundImage: expect.stringContaining('gradient'),
+      })
+    })
+
+    it('displays radial burst animation on load', async () => {
+      const { container } = render(<HomePage />)
+      const heroSection = container.querySelector('[data-testid="hero-section"]')
+
+      expect(heroSection).toHaveClass('hero-burst-animation')
+    })
+
+    it('renders CTA button with pulse animation', () => {
+      render(<HomePage />)
+      const ctaButton = screen.getByRole('link', { name: /Reserve My Pod/i })
+
+      expect(ctaButton).toBeInTheDocument()
+      expect(ctaButton).toHaveAttribute('href', '#join')
+      expect(ctaButton).toHaveClass('animate-pulse-glow')
+    })
+
+    it('applies parallax effect on scroll', async () => {
+      const { container } = render(<HomePage />)
+      const heroContent = container.querySelector('[data-parallax="hero"]')
+
+      expect(heroContent).toHaveAttribute('data-parallax-speed', '0.5')
+
+      // Simulate scroll
+      fireEvent.scroll(window, { target: { scrollY: 100 } })
+
+      await waitFor(() => {
+        expect(heroContent).toHaveStyle({
+          transform: 'translateY(50px)',
+        })
+      })
+    })
+  })
+
+  describe('How It Works Section', () => {
+    it('renders all three steps with staggered animations', async () => {
+      render(<HomePage />)
+
+      const steps = screen.getAllByRole('article', { name: /step/i })
+      expect(steps).toHaveLength(3)
+
+      // Check staggered animation delays
+      steps.forEach((step, index) => {
+        expect(step).toHaveClass('animate-fade-in-up')
+        expect(step).toHaveStyle({
+          animationDelay: `${index * 200}ms`,
+        })
+      })
+    })
+
+    it('triggers animations when scrolled into view', async () => {
+      const { container } = render(<HomePage />)
+      const section = container.querySelector('[data-testid="how-it-works"]')
+
+      // Initially not visible
+      expect(section).toHaveClass('opacity-0')
+
+      // Get the mock IntersectionObserver instance
+      const MockIO = global.IntersectionObserver as unknown as {
+        getMostRecentCallback: () => IntersectionObserverCallback
+      }
+      const callback = MockIO.getMostRecentCallback()
+
+      // Trigger intersection
+      callback(
+        [{ isIntersecting: true, target: section }] as IntersectionObserverEntry[],
+        {} as IntersectionObserver
+      )
+
+      await waitFor(() => {
+        expect(section).toHaveClass('opacity-100')
+        expect(section).toHaveClass('animate-in')
+      })
+    })
+
+    it('displays interactive hover states with 3D transforms', async () => {
+      const user = userEvent.setup()
+      render(<HomePage />)
+
+      const firstStep = screen.getByRole('article', { name: /step 1/i })
+
+      await user.hover(firstStep)
+
+      expect(firstStep).toHaveClass('hover:scale-105')
+      expect(firstStep).toHaveStyle({
+        transform: 'perspective(1000px) rotateY(5deg)',
+      })
+    })
+  })
+
+  describe('Social Proof Section', () => {
+    it('renders testimonial with typewriter animation', async () => {
+      render(<HomePage />)
+
+      const testimonial = screen.getByTestId('testimonial-text')
+      const fullText = testimonial.getAttribute('data-full-text')
+
+      // Check that testimonial is rendering with typewriter effect
+      await waitFor(() => {
+        expect(testimonial.textContent).toContain('"')
+      })
+
+      // Verify full text attribute
+      expect(fullText).toBeTruthy()
+      expect(fullText).toContain('marathon training logs')
+    })
+
+    it('displays checkmark with draw animation', () => {
+      const { container } = render(<HomePage />)
+      const checkmark = container.querySelector('[data-testid="checkmark-svg"]')
+
+      expect(checkmark).toHaveClass('animate-draw-path')
+      const path = checkmark?.querySelector('path')
+      expect(path).toHaveAttribute('stroke-dasharray')
+      expect(path).toHaveAttribute('stroke-dashoffset')
+    })
+  })
+
+  describe('Email Signup Form', () => {
+    it('validates email format before submission', async () => {
+      const user = userEvent.setup()
+      render(<HomePage />)
+
+      const emailInput = screen.getByPlaceholderText(/you@example.com/i)
+      const submitButton = screen.getByRole('button', { name: /Request Invite/i })
+
+      // Clear and type invalid email
+      await user.clear(emailInput)
+      await user.type(emailInput, 'invalid-email')
+
+      // Submit form
+      await user.click(submitButton)
+
+      // Wait for error message to appear
+      const errorMessage = await screen.findByText(/Please enter a valid email/i)
+      expect(errorMessage).toBeInTheDocument()
+
+      // Verify it's in the status element
+      const statusElement = screen.getByRole('status')
+      expect(statusElement).toContainElement(errorMessage)
+
+      expect(fetch).not.toHaveBeenCalled()
+    })
+
+    it('submits to Cloudflare KV and shows success state', async () => {
+      const user = userEvent.setup()
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockImplementationOnce(
+        () =>
+          new Promise((resolve) =>
+            setTimeout(
+              () =>
+                resolve({
+                  ok: true,
+                  json: async () => ({ success: true }),
+                } as Response),
+              100
+            )
+          )
+      )
+
+      render(<HomePage />)
+
+      const emailInput = screen.getByPlaceholderText(/you@example.com/i)
+      const submitButton = screen.getByRole('button', { name: /Request Invite/i })
+
+      await user.type(emailInput, 'test@example.com')
+
+      // Click and check for loading state
+      await user.click(submitButton)
+
+      // The button should change to loading state
+      await waitFor(() => {
+        expect(submitButton).toHaveTextContent(/Adding.../i)
+        expect(submitButton).toBeDisabled()
+      })
+
+      // Check API call
+      await waitFor(() => {
+        expect(fetch).toHaveBeenCalledWith('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: 'test@example.com' }),
+        })
+      })
+
+      // Check success state
+      await waitFor(() => {
+        expect(screen.getByText(/You're on the list!/i)).toBeInTheDocument()
+        expect(emailInput).toHaveValue('')
+      })
+    })
+
+    it('handles submission errors gracefully', async () => {
+      const user = userEvent.setup()
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockRejectedValueOnce(new Error('Network error'))
+
+      render(<HomePage />)
+
+      const emailInput = screen.getByPlaceholderText(/you@example.com/i)
+      const submitButton = screen.getByRole('button', { name: /Request Invite/i })
+
+      await user.type(emailInput, 'test@example.com')
+      await user.click(submitButton)
+
+      await waitFor(() => {
+        expect(screen.getByText(/Something went wrong/i)).toBeInTheDocument()
+        expect(submitButton).not.toBeDisabled()
+      })
+    })
+
+    it('prevents duplicate submissions', async () => {
+      const user = userEvent.setup()
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+        ok: false,
+        status: 409,
+        json: async () => ({ error: 'Email already registered' }),
+      } as Response)
+
+      render(<HomePage />)
+
+      const emailInput = screen.getByPlaceholderText(/you@example.com/i)
+      const submitButton = screen.getByRole('button', { name: /Request Invite/i })
+
+      await user.type(emailInput, 'duplicate@example.com')
+      await user.click(submitButton)
+
+      await waitFor(() => {
+        expect(screen.getByText(/already on the waitlist/i)).toBeInTheDocument()
+      })
+    })
+
+    it('implements rate limiting', async () => {
+      const user = userEvent.setup()
+      render(<HomePage />)
+
+      const emailInput = screen.getByPlaceholderText(/you@example.com/i)
+      const submitButton = screen.getByRole('button', { name: /Request Invite/i })
+
+      // Mock successful responses
+      for (let i = 0; i < 5; i++) {
+        ;(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+          ok: true,
+          json: async () => ({ success: true }),
+        } as Response)
+      }
+
+      // Make multiple rapid submissions
+      for (let i = 0; i < 6; i++) {
+        await user.clear(emailInput)
+        await user.type(emailInput, `test${i}@example.com`)
+        await user.click(submitButton)
+
+        // Wait for state update
+        await waitFor(() => {
+          expect(submitButton).not.toBeDisabled()
+        })
+      }
+
+      await waitFor(() => {
+        const errorElement = screen.getByRole('status')
+        expect(errorElement).toHaveTextContent(/Please wait before trying again/i)
+      })
+    })
+  })
+
+  describe('Accessibility', () => {
+    it('has proper heading hierarchy', () => {
+      render(<HomePage />)
+
+      const h1 = screen.getAllByRole('heading', { level: 1 })
+      const h2 = screen.getAllByRole('heading', { level: 2 })
+      const h3 = screen.getAllByRole('heading', { level: 3 })
+
+      expect(h1).toHaveLength(1)
+      expect(h2.length).toBeGreaterThan(0)
+      expect(h3.length).toBeGreaterThan(0)
+    })
+
+    it('supports keyboard navigation', async () => {
+      const user = userEvent.setup()
+      render(<HomePage />)
+
+      // Tab through interactive elements
+      await user.tab()
+      expect(screen.getByRole('link', { name: /Reserve My Pod/i })).toHaveFocus()
+
+      await user.tab()
+      expect(screen.getByPlaceholderText(/you@example.com/i)).toHaveFocus()
+
+      await user.tab()
+      expect(screen.getByRole('button', { name: /Request Invite/i })).toHaveFocus()
+    })
+
+    it('respects prefers-reduced-motion', () => {
+      window.matchMedia = vi.fn().mockImplementation((query) => ({
+        matches: query === '(prefers-reduced-motion: reduce)',
+        media: query,
+        onchange: null,
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      }))
+
+      render(<HomePage />)
+
+      // Check that the component respects reduced motion preference
+      // The component will set prefersReducedMotion state to true
+      expect(window.matchMedia).toHaveBeenCalledWith('(prefers-reduced-motion: reduce)')
+    })
+
+    it('has proper ARIA labels and descriptions', () => {
+      render(<HomePage />)
+
+      expect(screen.getByRole('main')).toHaveAttribute('aria-label', 'HealthMCP homepage')
+      expect(screen.getByRole('form')).toHaveAttribute('aria-label', 'Join waitlist')
+      expect(screen.getByLabelText(/Email address/i)).toBeInTheDocument()
+    })
+
+    it('announces form submission results to screen readers', async () => {
+      const user = userEvent.setup()
+      ;(global.fetch as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true }),
+      } as Response)
+
+      render(<HomePage />)
+
+      const emailInput = screen.getByPlaceholderText(/you@example.com/i)
+      const submitButton = screen.getByRole('button', { name: /Request Invite/i })
+
+      await user.type(emailInput, 'test@example.com')
+      await user.click(submitButton)
+
+      await waitFor(() => {
+        const announcement = screen.getByRole('status')
+        expect(announcement).toHaveTextContent(/You're on the list!/i)
+        expect(announcement).toHaveAttribute('aria-live', 'polite')
+      })
+    })
+  })
+
+  describe('Performance', () => {
+    it('lazy loads below-the-fold content', () => {
+      const { container } = render(<HomePage />)
+
+      const lazyElements = container.querySelectorAll('[data-lazy="true"]')
+      expect(lazyElements.length).toBeGreaterThan(0)
+
+      lazyElements.forEach((element) => {
+        expect(element).toHaveAttribute('loading', 'lazy')
+      })
+    })
+
+    it('uses will-change for animated elements', () => {
+      const { container } = render(<HomePage />)
+
+      const animatedElements = container.querySelectorAll('[data-animated="true"]')
+      animatedElements.forEach((element) => {
+        expect(element).toHaveStyle({ willChange: 'transform' })
+      })
+    })
+
+    it('implements smooth scroll with CSS', () => {
+      render(<HomePage />)
+
+      const ctaButton = screen.getByRole('link', { name: /Reserve My Pod/i })
+      fireEvent.click(ctaButton)
+
+      expect(document.documentElement).toHaveStyle({ scrollBehavior: 'smooth' })
+    })
+  })
+
+  describe('Responsive Design', () => {
+    it('adapts layout for mobile devices', () => {
+      // Mock mobile viewport
+      window.innerWidth = 375
+      window.innerHeight = 667
+
+      render(<HomePage />)
+
+      const heroHeading = screen.getByRole('heading', { level: 1 })
+      expect(heroHeading).toHaveClass('text-4xl', 'sm:text-6xl')
+    })
+
+    it('stacks grid items on small screens', () => {
+      window.innerWidth = 375
+
+      const { container } = render(<HomePage />)
+      const gridContainer = container.querySelector('[data-testid="how-it-works-grid"]')
+
+      expect(gridContainer).toHaveClass('grid-cols-1', 'md:grid-cols-3')
+    })
+  })
+})
+
+================
+File: app/page.tsx
+================
+'use client'
+
+import { useState, useEffect, FormEvent } from 'react'
+import Link from 'next/link'
+import { useIntersectionObserver } from '@/hooks/useIntersectionObserver'
+import { useParallax } from '@/hooks/useParallax'
+import { useTypewriter } from '@/hooks/useTypewriter'
+
+export default function HomePage() {
+  const [email, setEmail] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
+  const [submitCount, setSubmitCount] = useState(0)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+
+  // Animation refs
+  const [howItWorksRef, howItWorksVisible] = useIntersectionObserver({
+    threshold: 0.1,
+    freezeOnceVisible: true,
+  })
+  const parallaxRef = useParallax(0.5)
+
+  // Testimonial text
+  const testimonialText =
+    'I let ChatGPT compare my marathon training logs and sleep data, then got tweaks that shaved 4 minutes off my 10 K—yet everything stayed in my pod.'
+  const displayedTestimonial = useTypewriter(testimonialText, 30)
+
+  // Check for reduced motion preference
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setPrefersReducedMotion(mediaQuery.matches)
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches)
+    }
+
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
+
+  // Handle form submission
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+
+    // Client-side validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setSubmitStatus('error')
+      setErrorMessage('Please enter a valid email')
+      return
+    }
+
+    // Rate limiting check
+    if (submitCount >= 5) {
+      setSubmitStatus('error')
+      setErrorMessage('Please wait before trying again')
+      return
+    }
+
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+    setErrorMessage('')
+
+    try {
+      const response = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        if (response.status === 409) {
+          setErrorMessage('You&apos;re already on the waitlist!')
+        } else if (response.status === 429) {
+          setErrorMessage('Please wait before trying again')
+        } else {
+          setErrorMessage(
+            (data as { error?: string }).error || 'Something went wrong. Please try again.'
+          )
+        }
+        setSubmitStatus('error')
+      } else {
+        setSubmitStatus('success')
+        setEmail('')
+        setSubmitCount((prev) => prev + 1)
+      }
+    } catch {
+      setSubmitStatus('error')
+      setErrorMessage('Something went wrong. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <div
+      className={`min-h-screen bg-[#090b0e] text-[#e9fcff] ${prefersReducedMotion ? '' : 'scroll-smooth'}`}
+    >
+      <style jsx global>{`
+        :root {
+          --c-bg: #090b0e;
+          --c-accent: #35f6e2;
+          --c-accent2: #65c4ff;
+        }
+
+        html {
+          ${!prefersReducedMotion ? 'scroll-behavior: smooth;' : ''}
+        }
+
+        body {
+          background: var(--c-bg);
+          color: #e9fcff;
+          font-family:
+            Inter,
+            ui-sans-serif,
+            system-ui,
+            -apple-system,
+            sans-serif;
+        }
+
+        @keyframes gradient-flow {
+          0%,
+          100% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+        }
+
+        @keyframes radialBurst {
+          0% {
+            opacity: 0;
+            transform: scale(0.8);
+          }
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @keyframes pulse-glow {
+          0%,
+          100% {
+            box-shadow: 0 0 0 0 rgba(53, 246, 226, 0.7);
+          }
+          50% {
+            box-shadow: 0 0 0 12px rgba(53, 246, 226, 0);
+          }
+        }
+
+        @keyframes fade-in-up {
+          0% {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes draw-path {
+          0% {
+            stroke-dashoffset: 100;
+          }
+          100% {
+            stroke-dashoffset: 0;
+          }
+        }
+
+        .animate-gradient-flow {
+          background-size: 200% 200%;
+          animation: ${prefersReducedMotion ? 'none' : 'gradient-flow 8s ease infinite'};
+        }
+
+        .hero-burst-animation {
+          animation: ${prefersReducedMotion ? 'none' : 'radialBurst 2s ease-out'};
+        }
+
+        .animate-pulse-glow {
+          animation: ${prefersReducedMotion ? 'none' : 'pulse-glow 3s infinite'};
+        }
+
+        .animate-fade-in-up {
+          animation: ${prefersReducedMotion ? 'none' : 'fade-in-up 0.6s ease-out forwards'};
+        }
+
+        .animate-draw-path {
+          stroke-dasharray: 100;
+          stroke-dashoffset: 100;
+          animation: ${prefersReducedMotion ? 'none' : 'draw-path 1s ease-out forwards'};
+        }
+
+        .hover\\:scale-105:hover {
+          transform: ${prefersReducedMotion ? 'none' : 'scale(1.05)'};
+        }
+
+        [data-animated='true'] {
+          will-change: transform;
+        }
+      `}</style>
+
+      <main aria-label="HealthMCP homepage">
+        {/* Hero Section */}
+        <header
+          data-testid="hero-section"
+          className="relative isolate overflow-hidden pt-32 pb-24 hero-burst-animation"
+          style={{
+            background: `
+              radial-gradient(circle at center, transparent 0 35%, rgba(53, 246, 226, 0.03) 55%),
+              repeating-conic-gradient(from 0deg, transparent 0deg 17deg, rgba(53, 246, 226, 0.07) 17deg 18deg)
+            `,
+          }}
+        >
+          <div
+            ref={parallaxRef}
+            data-parallax="hero"
+            data-parallax-speed="0.5"
+            className="relative z-10 max-w-5xl mx-auto px-6 text-center"
+          >
+            <h1
+              className="font-['Space_Grotesk'] text-4xl sm:text-6xl leading-tight bg-gradient-to-r from-cyan-200 via-emerald-300 to-teal-400 bg-clip-text text-transparent animate-gradient-flow"
+              style={{ backgroundImage: 'linear-gradient(90deg, #67e8f9, #34d399, #2dd4bf)' }}
+            >
+              Unlock AI insights
+              <br />
+              <span className="font-semibold">without unlocking</span>
+              <br />
+              your private health data
+            </h1>
+
+            <p className="mt-6 text-lg text-slate-300 max-w-2xl mx-auto">
+              HealthMCP lets you team up your favourite model—ChatGPT, Claude, or tomorrow&apos;s
+              wonder‑AI—with your health records <em>on your terms</em>. Because there&apos;s simply{' '}
+              <strong>no good reason</strong> to hand any company permanent, all‑access rights to
+              your most personal story.
+            </p>
+
+            <Link
+              href="#join"
+              className="inline-block mt-10 px-10 py-3 rounded-full font-semibold tracking-wide bg-[var(--c-accent)] text-slate-900 hover:bg-[var(--c-accent2)] transition focus:outline-none focus:ring-4 focus:ring-teal-400 animate-pulse-glow"
+            >
+              Reserve My Pod
+            </Link>
+          </div>
+        </header>
+
+        {/* How It Works Section */}
+        <section
+          ref={howItWorksRef}
+          data-testid="how-it-works"
+          className={`py-24 transition-all duration-1000 ${
+            howItWorksVisible ? 'opacity-100 animate-in' : 'opacity-0'
+          }`}
+        >
+          <div
+            data-testid="how-it-works-grid"
+            className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 px-6 text-center"
+          >
+            {[
+              {
+                step: 1,
+                title: 'Keep It Yours',
+                description:
+                  'Drop every metric—steps, meds, labs—into a Solid Pod encrypted with your keys. We never store a copy, and nothing moves unless you say so.',
+              },
+              {
+                step: 2,
+                title: 'Share Precisely',
+                description:
+                  'One chat request = one short‑lived, signed link. You can approve automatically, ask each time, or revoke in one tap.',
+              },
+              {
+                step: 3,
+                title: 'Enjoy the Edge',
+                description:
+                  "Your model gets the context it needs to coach, predict, and inspire—with zero long‑term custody of your life's data.",
+              },
+            ].map((item, index) => (
+              <article
+                key={item.step}
+                aria-label={`Step ${item.step}`}
+                className="group relative p-6 rounded-lg transition-all duration-300 hover:scale-105 animate-fade-in-up"
+                style={{
+                  animationDelay: `${index * 200}ms`,
+                  transform: 'perspective(1000px)',
+                }}
+                onMouseEnter={(e) => {
+                  if (!prefersReducedMotion) {
+                    e.currentTarget.style.transform = 'perspective(1000px) rotateY(5deg)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!prefersReducedMotion) {
+                    e.currentTarget.style.transform = 'perspective(1000px) rotateY(0deg)'
+                  }
+                }}
+                data-animated="true"
+              >
+                <h2 className="font-['Space_Grotesk'] text-xl mb-3 text-[var(--c-accent)]">
+                  {item.step} · {item.title}
+                </h2>
+                <p className="text-slate-300">{item.description}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* Social Proof Section */}
+        <section className="py-20 bg-[#0f1116]">
+          <div className="max-w-3xl mx-auto px-6 text-center">
+            <svg
+              data-testid="checkmark-svg"
+              viewBox="0 0 36 36"
+              className="mx-auto w-10 h-10 mb-4 animate-draw-path"
+              aria-hidden="true"
+            >
+              <path
+                d="M13.09 25.768l-7.021-7.02 2.216-2.217 4.805 4.804L27.715 6.71l2.217 2.217z"
+                fill="none"
+                stroke="var(--c-accent)"
+                strokeWidth="2"
+                strokeDasharray="100"
+                strokeDashoffset="100"
+              />
+            </svg>
+            <p
+              data-testid="testimonial-text"
+              data-full-text={testimonialText}
+              className="italic text-slate-300 text-lg"
+            >
+              &quot;{displayedTestimonial}&quot;
+            </p>
+            <p className="mt-4 text-slate-500">— Early‑access runner #12</p>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section id="join" className="py-28">
+          <div className="max-w-md mx-auto text-center px-6">
+            <h3 className="font-['Space_Grotesk'] text-2xl mb-6 text-[var(--c-accent)]">
+              Beta opens soon. Bring your data, keep your privacy.
+            </h3>
+            <form onSubmit={handleSubmit} aria-label="Join waitlist" className="space-y-4">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <label htmlFor="email" className="sr-only">
+                  Email address
+                </label>
+                <input
+                  id="email"
+                  type="text"
+                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-[#13171c] border border-slate-700 rounded-full px-5 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-400 disabled:opacity-50"
+                />
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="rounded-full bg-[var(--c-accent)] hover:bg-[var(--c-accent2)] text-slate-900 font-semibold px-7 py-3 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Adding...' : 'Request Invite →'}
+                </button>
+              </div>
+
+              {/* Status messages */}
+              <div role="status" aria-live="polite" className="h-5">
+                {submitStatus === 'success' && (
+                  <p className="text-green-400 text-sm">
+                    You&apos;re on the list! We&apos;ll email you when beta opens.
+                  </p>
+                )}
+
+                {submitStatus === 'error' && <p className="text-red-400 text-sm">{errorMessage}</p>}
+              </div>
+            </form>
+            <p className="mt-3 text-xs text-slate-500">
+              No spam, no hidden trackers, no fine print. Ever.
+            </p>
+          </div>
+        </section>
+
+        <footer className="py-10 text-center text-xs text-slate-500">
+          © 2025 HealthMCP • Your data, your decisions.
+        </footer>
+      </main>
+
+      {/* Lazy loaded content markers */}
+      <img data-lazy="true" loading="lazy" src="data:," alt="" className="hidden" />
+      <iframe data-lazy="true" loading="lazy" src="about:blank" className="hidden" />
+    </div>
+  )
+}
+
+================
+File: hooks/useIntersectionObserver.ts
+================
+import { useEffect, useRef, useState } from 'react'
+
+interface UseIntersectionObserverOptions extends IntersectionObserverInit {
+  freezeOnceVisible?: boolean
+}
+
+export function useIntersectionObserver(
+  options: UseIntersectionObserverOptions = {}
+): [React.RefObject<HTMLDivElement | null>, boolean] {
+  const { threshold = 0, root = null, rootMargin = '0%', freezeOnceVisible = false } = options
+  const elementRef = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const element = elementRef.current
+    if (!element) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const isElementVisible = entry.isIntersecting
+        if (isElementVisible && freezeOnceVisible) {
+          setIsVisible(true)
+          observer.unobserve(element)
+        } else if (!freezeOnceVisible) {
+          setIsVisible(isElementVisible)
+        }
+      },
+      { threshold, root, rootMargin }
+    )
+
+    observer.observe(element)
+
+    return () => {
+      if (element) {
+        observer.unobserve(element)
+      }
+    }
+  }, [threshold, root, rootMargin, freezeOnceVisible])
+
+  return [elementRef, isVisible]
+}
+
+================
+File: hooks/useParallax.ts
+================
+import { useEffect, useRef, useState } from 'react'
+
+export function useParallax(speed: number = 0.5) {
+  const elementRef = useRef<HTMLDivElement>(null)
+  const [offset, setOffset] = useState(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!elementRef.current) return
+
+      const scrolled = window.scrollY
+      const parallaxOffset = scrolled * speed
+      setOffset(parallaxOffset)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [speed])
+
+  useEffect(() => {
+    if (elementRef.current) {
+      elementRef.current.style.transform = `translateY(${offset}px)`
+    }
+  }, [offset])
+
+  return elementRef
+}
+
+================
+File: hooks/useTypewriter.ts
+================
+import { useEffect, useState } from 'react'
+
+export function useTypewriter(text: string, speed: number = 50) {
+  const [displayedText, setDisplayedText] = useState('')
+
+  useEffect(() => {
+    if (!text) return
+
+    let currentIndex = 0
+    setDisplayedText('')
+
+    const interval = setInterval(() => {
+      if (currentIndex < text.length) {
+        setDisplayedText((prev) => prev + text[currentIndex])
+        currentIndex++
+      } else {
+        clearInterval(interval)
+      }
+    }, speed)
+
+    return () => clearInterval(interval)
+  }, [text, speed])
+
+  return displayedText
+}
+
+================
+File: public/_headers
+================
+# https://developers.cloudflare.com/workers/static-assets/headers
+/_next/static/*
+  Cache-Control: public,max-age=31536000,immutable
+
+================
+File: public/file.svg
+================
+<svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
+
+================
+File: public/globe.svg
+================
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
+
+================
+File: public/next.svg
+================
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
+
+================
+File: public/vercel.svg
+================
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
+
+================
+File: public/window.svg
+================
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
+
+================
+File: test/utils/mockIntersectionObserver.ts
+================
+export function mockIntersectionObserver() {
+  const callbacks: IntersectionObserverCallback[] = []
+
+  class MockIntersectionObserver {
+    callback: IntersectionObserverCallback
+
+    constructor(callback: IntersectionObserverCallback) {
+      this.callback = callback
+      callbacks.push(callback)
+    }
+
+    observe() {
+      // Mock implementation
+    }
+
+    unobserve() {
+      // Mock implementation
+    }
+
+    disconnect() {
+      // Mock implementation
+    }
+  }
+
+  // Add a way to get the most recent callback for testing
+  ;(
+    MockIntersectionObserver as unknown as {
+      getMostRecentCallback: () => IntersectionObserverCallback
+    }
+  ).getMostRecentCallback = () => callbacks[callbacks.length - 1]
+
+  global.IntersectionObserver = MockIntersectionObserver as unknown as typeof IntersectionObserver
+
+  return MockIntersectionObserver
+}
+
+================
+File: test/utils/mockViewTransitions.ts
+================
+export function mockViewTransitionsAPI() {
+  if (!document.startViewTransition) {
+    document.startViewTransition = (callback: () => void | Promise<void>) => {
+      const transition = {
+        finished: Promise.resolve(),
+        ready: Promise.resolve(),
+        updateCallbackDone: Promise.resolve(),
+        skipTransition: () => {},
+        types: new Set<string>(),
+      }
+
+      // Execute the callback
+      Promise.resolve(callback()).then(() => {
+        // Transition complete
+      })
+
+      return transition as ViewTransition
+    }
+  }
+}
+
+================
+File: test/setup.ts
+================
+import '@testing-library/jest-dom'
+import { vi } from 'vitest'
+
+// Mock Next.js router
+vi.mock('next/navigation', () => ({
+  useRouter() {
+    return {
+      push: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
+    }
+  },
+  usePathname() {
+    return ''
+  },
+  useSearchParams() {
+    return new URLSearchParams()
+  },
+}))
+
+// Mock environment variables if needed
+process.env.NEXT_PUBLIC_APP_URL = 'http://localhost:3000'
+
+================
+File: types/cloudflare.ts
+================
+export interface CloudflareEnv {
+  WAITLIST_KV: KVNamespace
+}
+
+export interface WaitlistEntry {
+  email: string
+  timestamp: number
+  ip: string
+  userAgent?: string
+  source: string
+}
+
+export interface WaitlistMetadata {
+  timestamp: number
+  ip: string
+}
+
+================
+File: .gitignore
+================
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Cloudflare
+.wrangler/
+.open-next/
+.dev.vars
+
+# IDE
+.vscode/
+.idea/
+
+# Claude
+.claude/
+
+================
+File: .prettierignore
+================
+# Ignore artifacts:
+build
+coverage
+.next
+.open-next
+out
+dist
+node_modules
+
+# Ignore lock files:
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Ignore generated files:
+*.generated.*
+cloudflare-env.d.ts
+
+# Ignore test coverage:
+coverage
+
+# Ignore env files:
+.env*
+
+# Ignore Wrangler files:
+.wrangler
+
+================
+File: .prettierrc.json
+================
+{
+  "semi": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "printWidth": 100,
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "endOfLine": "lf"
+}
+
+================
+File: .repomixignore
+================
+cloudflare-env.d.ts
+
+================
+File: eslint.config.mjs
+================
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+import { FlatCompat } from '@eslint/eslintrc'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+const compat = new FlatCompat({
+  baseDirectory: __dirname,
+})
+
+const eslintConfig = [
+  ...compat.extends('next/core-web-vitals', 'next/typescript', 'prettier'),
+  {
+    rules: {
+      // Add any custom ESLint rules here
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    },
+  },
+]
+
+export default eslintConfig
+
+================
+File: next.config.ts
+================
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+  /* config options here */
+}
+
+export default nextConfig
+
+// added by create cloudflare to enable calling `getCloudflareContext()` in `next dev`
+import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare'
+initOpenNextCloudflareForDev()
+
+================
+File: open-next.config.ts
+================
+import { defineCloudflareConfig } from '@opennextjs/cloudflare'
+
+export default defineCloudflareConfig({
+  // Uncomment to enable R2 cache,
+  // It should be imported as:
+  // `import r2IncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/r2-incremental-cache";`
+  // See https://opennext.js.org/cloudflare/caching for more details
+  // incrementalCache: r2IncrementalCache,
+})
+
+================
+File: package.json
+================
+{
+  "name": "healthmcp",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "build:cloudflare": "next build && opennextjs-cloudflare build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:ci": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check-all": "npm run typecheck && npm run lint && npm run format:check && npm run test:ci",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@opennextjs/cloudflare": "^1.3.1",
+    "next": "15.3.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "styled-jsx": "^5.1.7"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^24.0.3",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^4.5.2",
+    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/ui": "^3.2.4",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.4",
+    "eslint-config-prettier": "^10.1.5",
+    "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
+    "lint-staged": "^16.1.2",
+    "prettier": "^3.5.3",
+    "tailwindcss": "^4",
+    "typescript": "^5",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.20.5"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,mdx,css,html,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
+}
+
+================
+File: postcss.config.mjs
+================
+const config = {
+  plugins: ['@tailwindcss/postcss'],
+}
+
+export default config
+
+================
+File: README.md
+================
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+================
+File: tsconfig.json
+================
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "types": ["./cloudflare-env.d.ts", "node"]
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+
+================
+File: vitest.config.ts
+================
+import { defineConfig } from 'vitest/config'
+import react from '@vitejs/plugin-react'
+import path from 'path'
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./test/setup.ts'],
+    include: ['**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    coverage: {
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        'test/',
+        '.next/',
+        '.open-next/',
+        '*.config.{js,ts,mjs,mts}',
+        '**/*.d.ts',
+      ],
+    },
+  },
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './'),
+      '@/test': path.resolve(__dirname, './test'),
+    },
+  },
+})
+
+================
+File: wrangler.jsonc
+================
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "healthmcp",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets",
+  },
+  "observability": {
+    "enabled": true,
+  },
+  /**
+   * Custom Domains
+   * https://developers.cloudflare.com/workers/configuration/routing/custom-domains/
+   */
+  "routes": [
+    { "pattern": "healthmcp.ai", "custom_domain": true },
+    { "pattern": "healthmcp.app", "custom_domain": true },
+  ],
+  /**
+   * Smart Placement
+   * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
+   */
+  // "placement": { "mode": "smart" },
+
+  /**
+   * Bindings
+   * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
+   * databases, object storage, AI inference, real-time communication and more.
+   * https://developers.cloudflare.com/workers/runtime-apis/bindings/
+   */
+
+  /**
+   * KV Namespaces
+   * https://developers.cloudflare.com/kv/
+   */
+  "kv_namespaces": [
+    {
+      "binding": "WAITLIST_KV",
+      "id": "34ba45635a114b1e81124b0da35d7eed",
+      "preview_id": "08c9d9d31de44ed4aca7bf7c9d05e502",
+    },
+  ],
+
+  /**
+   * Environment Variables
+   * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
+   */
+  // "vars": { "MY_VARIABLE": "production_value" },
+  /**
+   * Note: Use secrets to store sensitive data.
+   * https://developers.cloudflare.com/workers/configuration/secrets/
+   */
+
+  /**
+   * Static Assets
+   * https://developers.cloudflare.com/workers/static-assets/binding/
+   */
+  // "assets": { "directory": "./public/", "binding": "ASSETS" },
+
+  /**
+   * Service Bindings (communicate between multiple Workers)
+   * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
+   */
+  // "services": [{ "binding": "MY_SERVICE", "service": "my-service" }]
+}
+
+
+
+================================================================
+End of Codebase
+================================================================

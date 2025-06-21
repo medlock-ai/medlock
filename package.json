@@ -2,22 +2,29 @@
   "name": "healthmcp",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "build:cloudflare": "next build && opennextjs-cloudflare build",
-    "start": "next start",
-    "lint": "next lint",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage",
-    "test:ci": "vitest run --coverage",
-    "typecheck": "tsc --noEmit",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "check-all": "npm run typecheck && npm run lint && npm run format:check && npm run test:ci",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "dev": "yarn workspace @healthmcp/web dev",
+    "build": "yarn workspace @healthmcp/web build && yarn workspace @healthmcp/mcp build",
+    "build:web": "cd apps/web && yarn build:cloudflare",
+    "build:mcp": "cd apps/mcp && yarn build",
+    "dev:web": "yarn workspace @healthmcp/web dev",
+    "dev:mcp": "yarn workspace @healthmcp/mcp dev",
+    "test": "yarn workspaces foreach -A run test",
+    "test:mcp": "yarn workspace @healthmcp/mcp test",
+    "test:web": "yarn workspace @healthmcp/web test",
+    "typecheck": "yarn workspaces foreach -A run typecheck",
+    "lint": "yarn workspaces foreach -A run lint",
+    "format:check": "yarn workspaces foreach -A run format:check",
+    "test:ci": "yarn workspaces foreach -A run test:ci",
+    "build:cloudflare": "cd apps/web && yarn build:cloudflare",
+    "deploy": "cd apps/web && yarn deploy",
+    "preview": "cd apps/web && yarn preview",
+    "deploy:mcp": "cd apps/mcp && npx wrangler deploy -c wrangler.jsonc --env=''",
+    "ci:build:mcp": "echo 'Building MCP Server - No compilation required for Workers'",
+    "ci:build:web": "yarn install && cd apps/web && yarn build:cloudflare",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts",
     "prepare": "husky"
   },
@@ -31,6 +38,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.0.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
@@ -49,6 +57,7 @@
     "prettier": "^3.5.3",
     "tailwindcss": "^4",
     "typescript": "^5",
+    "vite": "^5.0.0",
     "vitest": "^3.2.4",
     "wrangler": "^4.20.5"
   },
@@ -60,5 +69,6 @@
     "*.{json,md,mdx,css,html,yml,yaml}": [
       "prettier --write"
     ]
-  }
+  },
+  "packageManager": "yarn@4.9.2"
 }
