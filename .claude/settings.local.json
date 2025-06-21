@@ -47,7 +47,12 @@
       "Bash(--method PATCH )",
       "Bash(--field strict=true )",
       "Bash(--field 'contexts[]=Test, Lint, and Type Check' )",
-      "Bash(--field 'contexts[]=Workers Builds: healthmcp')"
+      "Bash(--field 'contexts[]=Workers Builds: healthmcp')",
+      "WebFetch(domain:dash.cloudflare.com)",
+      "Bash(npm run test:*)",
+      "Bash(npm run lint:*)",
+      "Bash(npm test)",
+      "Bash(npm test:*)"
     ],
     "deny": []
   }

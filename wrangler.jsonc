@@ -37,6 +37,18 @@
    */
 
   /**
+   * KV Namespaces
+   * https://developers.cloudflare.com/kv/
+   */
+  "kv_namespaces": [
+    {
+      "binding": "WAITLIST_KV",
+      "id": "34ba45635a114b1e81124b0da35d7eed",
+      "preview_id": "08c9d9d31de44ed4aca7bf7c9d05e502",
+    },
+  ],
+
+  /**
    * Environment Variables
    * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
    */
