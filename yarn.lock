@@ -2923,7 +2923,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@modelcontextprotocol/sdk@npm:^1.12.0":
+"@modelcontextprotocol/sdk@npm:^1.13.0":
   version: 1.13.0
   resolution: "@modelcontextprotocol/sdk@npm:1.13.0"
   dependencies:
@@ -5234,19 +5234,19 @@ __metadata:
   linkType: hard
 
 "agents@npm:latest":
-  version: 0.0.95
-  resolution: "agents@npm:0.0.95"
+  version: 0.0.97
+  resolution: "agents@npm:0.0.97"
   dependencies:
-    "@modelcontextprotocol/sdk": "npm:^1.12.0"
+    "@modelcontextprotocol/sdk": "npm:^1.13.0"
     ai: "npm:^4.3.16"
     cron-schedule: "npm:^5.0.4"
     nanoid: "npm:^5.1.5"
-    partyserver: "npm:^0.0.71"
+    partyserver: "npm:^0.0.72"
     partysocket: "npm:1.1.4"
-    zod: "npm:^3.25.28"
+    zod: "npm:^3.25.67"
   peerDependencies:
     react: "*"
-  checksum: 10c0/fb3c46d2068d696aa6ed4b76a9730f2df06841fd8f173634fb5c9f06990efdf0ddfd7bec659d9255d1b7e2cac21fdc77680df127098f1cf100067eaf492d57db
+  checksum: 10c0/fa320ad9fc684cc3527d71f3dc7f0f1389b7140d1b58afb97be6a08c0dbf85a02c3f437ab836c94d72bb4ca275ebfa1c69758c3350e26da0318192d612d228f2
   languageName: node
   linkType: hard
 
@@ -9380,14 +9380,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"partyserver@npm:^0.0.71":
-  version: 0.0.71
-  resolution: "partyserver@npm:0.0.71"
+"partyserver@npm:^0.0.72":
+  version: 0.0.72
+  resolution: "partyserver@npm:0.0.72"
   dependencies:
     nanoid: "npm:^5.1.5"
   peerDependencies:
     "@cloudflare/workers-types": ^4.20240729.0
-  checksum: 10c0/aeba7bd676a088b1ad75f8c3b74e3d79ce7ae2e34326bc08a27fe0b8ef1d8f2d0dd29937e0a67d414925ddb462ec471de69a7c8e4588e6c254a79fe5da033f55
+  checksum: 10c0/94075ecb2f11a1517f32916fbc662b542735ade7e092042f9f9888d61ebb1d3cfd76ccaf406ff8e7c672c6812123fb075888c6b4196c7d38df10dbdc8f0d928a
   languageName: node
   linkType: hard
 
@@ -11771,7 +11771,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.22.3, zod@npm:^3.22.4, zod@npm:^3.23.8, zod@npm:^3.25.28":
+"zod@npm:^3.22.3, zod@npm:^3.22.4, zod@npm:^3.23.8, zod@npm:^3.25.67":
   version: 3.25.67
   resolution: "zod@npm:3.25.67"
   checksum: 10c0/80a0cab3033272c4ab9312198081f0c4ea88e9673c059aa36dc32024906363729db54bdb78f3dc9d5529bd1601f74974d5a56c0a23e40c6f04a9270c9ff22336
