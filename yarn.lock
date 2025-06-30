@@ -2369,7 +2369,7 @@ __metadata:
     "@vitest/ui": "npm:^3.2.4"
     agents: "npm:latest"
     eslint: "npm:^9.17.0"
-    hono: "npm:^4.4.0"
+    hono: "npm:^4.8.3"
     prettier: "npm:^3.5.3"
     react: "npm:^19.0.0"
     typescript: "npm:^5.6.3"
@@ -2923,9 +2923,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@modelcontextprotocol/sdk@npm:^1.13.0":
-  version: 1.13.0
-  resolution: "@modelcontextprotocol/sdk@npm:1.13.0"
+"@modelcontextprotocol/sdk@npm:^1.13.1":
+  version: 1.13.2
+  resolution: "@modelcontextprotocol/sdk@npm:1.13.2"
   dependencies:
     ajv: "npm:^6.12.6"
     content-type: "npm:^1.0.5"
@@ -2938,7 +2938,7 @@ __metadata:
     raw-body: "npm:^3.0.0"
     zod: "npm:^3.23.8"
     zod-to-json-schema: "npm:^3.24.1"
-  checksum: 10c0/bbc07460659b5b4b4ecf19befd8bb8dde2aeee20123f388a0d58142da9a7a22e292fbb11b1d99ea54ae514652db129c3ec3b35fc5e9e61bf49d3bb9b221657cc
+  checksum: 10c0/f0c41af0f39dbbbfa4c2c3840611806f102987b8a6bc8bf9c4b2adf415ac5655c880935acfd758facb78120dd30a833133ad3398a0f623ee701f80c0ccec9d63
   languageName: node
   linkType: hard
 
@@ -5234,10 +5234,10 @@ __metadata:
   linkType: hard
 
 "agents@npm:latest":
-  version: 0.0.97
-  resolution: "agents@npm:0.0.97"
+  version: 0.0.99
+  resolution: "agents@npm:0.0.99"
   dependencies:
-    "@modelcontextprotocol/sdk": "npm:^1.13.0"
+    "@modelcontextprotocol/sdk": "npm:^1.13.1"
     ai: "npm:^4.3.16"
     cron-schedule: "npm:^5.0.4"
     nanoid: "npm:^5.1.5"
@@ -5246,7 +5246,7 @@ __metadata:
     zod: "npm:^3.25.67"
   peerDependencies:
     react: "*"
-  checksum: 10c0/fa320ad9fc684cc3527d71f3dc7f0f1389b7140d1b58afb97be6a08c0dbf85a02c3f437ab836c94d72bb4ca275ebfa1c69758c3350e26da0318192d612d228f2
+  checksum: 10c0/84e0b2a32a8f3922421453debaa6f013988d768aa5b3a72282649ba5c51bc0b7148f206910a9570bf691c219b2c8fc137fa54d551b8e0d169101c2a9ff2cd4cd
   languageName: node
   linkType: hard
 
@@ -7668,10 +7668,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"hono@npm:^4.4.0":
-  version: 4.8.2
-  resolution: "hono@npm:4.8.2"
-  checksum: 10c0/371092393238fa9628efc9aaf41e3f6da33db242aabec858fd1bf9509b0b3b74883f7ca724cc41143ccdbc03617f2606911a97a0a0632f97c14731769412ef31
+"hono@npm:^4.8.3":
+  version: 4.8.3
+  resolution: "hono@npm:4.8.3"
+  checksum: 10c0/2b64fa612da4f53d1f2bef467a3be06c3f6fdb2dc32543241f0682a1d1a2970c716c5e4a107f5c9bc4a0fade45ae31033d23561302c75b5bdc74f4c6b9a5c3b6
   languageName: node
   linkType: hard
 
