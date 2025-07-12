@@ -184,6 +184,7 @@ export default function HomePage() {
         }
 
         .animate-pulse-glow {
+          border-radius: 9999px;
           animation: ${prefersReducedMotion ? 'none' : 'pulse-glow 3s infinite'};
         }
 
