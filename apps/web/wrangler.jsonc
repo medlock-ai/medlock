@@ -22,6 +22,7 @@
   "routes": [
     { "pattern": "healthmcp.ai", "custom_domain": true },
     { "pattern": "healthmcp.app", "custom_domain": true },
+    { "pattern": "medlock.ai", "custom_domain": true },
   ],
   /**
    * Smart Placement
