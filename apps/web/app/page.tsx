@@ -361,7 +361,7 @@ export default function HomePage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   disabled={isSubmitting}
-                  className="flex-1 bg-[#13171c] border border-slate-700 rounded-full px-5 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-400 disabled:opacity-50"
+                  className="appearance-none flex-1 bg-[#13171c] border border-slate-700 rounded-full px-5 py-3 text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-teal-400 disabled:opacity-50"
                 />
                 <button
                   type="submit"
