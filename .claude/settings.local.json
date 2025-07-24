@@ -86,7 +86,10 @@
       "Bash(sed:*)",
       "Bash(npm run type-check:*)",
       "Bash(cat:*)",
-      "Bash(yarn typecheck)"
+      "Bash(yarn typecheck)",
+      "Bash(rm:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   }

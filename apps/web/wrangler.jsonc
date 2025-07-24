@@ -19,10 +19,11 @@
    * Custom Domains
    * https://developers.cloudflare.com/workers/configuration/routing/custom-domains/
    */
+  /**
+   * Update with your custom domain or use workers.dev subdomain
+   */
   "routes": [
-    { "pattern": "healthmcp.ai", "custom_domain": true },
-    { "pattern": "healthmcp.app", "custom_domain": true },
-    { "pattern": "medlock.ai", "custom_domain": true },
+    { "pattern": "your-domain.com", "custom_domain": true },
   ],
   /**
    * Smart Placement
@@ -41,11 +42,14 @@
    * KV Namespaces
    * https://developers.cloudflare.com/kv/
    */
+  /**
+   * Create KV namespace: wrangler kv namespace create WAITLIST_KV
+   */
   "kv_namespaces": [
     {
       "binding": "WAITLIST_KV",
-      "id": "34ba45635a114b1e81124b0da35d7eed",
-      "preview_id": "08c9d9d31de44ed4aca7bf7c9d05e502",
+      "id": "YOUR_WAITLIST_KV_ID",
+      "preview_id": "YOUR_WAITLIST_KV_PREVIEW_ID",
     },
   ],
 

@@ -7,17 +7,20 @@
 
   /**
    * KV Namespaces for data storage
+   * Note: You'll need to create these namespaces and update the IDs
+   * Run: wrangler kv namespace create TOKENS
+   * Run: wrangler kv namespace create AUDIT
    */
   "kv_namespaces": [
     {
       "binding": "TOKENS",
-      "id": "e1a58b0c701f447fa6b612b57253fcaa",
-      "preview_id": "054f9e43724148e5b02ef88e2ded3236",
+      "id": "YOUR_TOKENS_NAMESPACE_ID",
+      "preview_id": "YOUR_TOKENS_PREVIEW_ID",
     },
     {
       "binding": "AUDIT",
-      "id": "17cf1513be614f7bad48dec0313750ba",
-      "preview_id": "8d057aae43c94933966a8939d7381d7a",
+      "id": "YOUR_AUDIT_NAMESPACE_ID",
+      "preview_id": "YOUR_AUDIT_PREVIEW_ID",
     },
   ],
 
@@ -49,10 +52,11 @@
 
   /**
    * Custom domain routing
+   * Update with your domain or use workers.dev subdomain
    */
   "routes": [
     {
-      "pattern": "api.healthmcp.ai",
+      "pattern": "api.your-domain.com",
       "custom_domain": true,
     },
   ],
@@ -62,7 +66,7 @@
    */
   "vars": {
     "MCP_VERSION": "v0.1.0",
-    "ALLOWED_ORIGINS": "https://healthmcp.ai,https://chat.openai.com,https://claude.ai",
+    "ALLOWED_ORIGINS": "https://chat.openai.com,https://claude.ai",
     "SOLID_POD_DOMAIN": "storage.solidpod.com",
   },
 
@@ -90,7 +94,7 @@
       "name": "healthmcp-mcp-staging",
       "routes": [
         {
-          "pattern": "api-staging.healthmcp.ai",
+          "pattern": "api-staging.your-domain.com",
           "custom_domain": true,
         },
       ],
