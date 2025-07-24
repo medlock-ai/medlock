@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Medlock
 
-## Getting Started
+Privacy-preserving health data platform using Model Context Protocol (MCP).
 
-First, run the development server:
+## What is Medlock?
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Medlock enables AI models to interact with your personal health data stored in Solid Pods. You maintain full control while leveraging AI insights.
+
+### Key Features
+
+- **Privacy First**: Your health data stays in your Solid Pod
+- **AI Integration**: Works with ChatGPT, Claude, and other MCP-compatible models
+- **Time-Limited Access**: 60-second signed URLs for data security
+- **Comprehensive Audit Logs**: Track every data access
+- **GitHub OAuth**: Secure authentication
+
+## Architecture
+
+```
+apps/
+├── web/          # Marketing site (Next.js on Cloudflare Pages)
+└── mcp/          # MCP server (Hono on Cloudflare Workers)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Quick Start
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js 20+
+- Yarn 4
+- Cloudflare account
+- GitHub OAuth app
 
-## Learn More
+### Installation
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+# Clone the repository
+git clone https://github.com/your-username/medlock.git
+cd medlock
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# Install dependencies
+yarn install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Set up environment
+cp .env.example .env
+```
 
-## Deploy on Vercel
+### Cloudflare Setup
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Create KV namespaces:
+```bash
+cd apps/mcp
+wrangler kv namespace create TOKENS
+wrangler kv namespace create AUDIT
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+cd ../web
+wrangler kv namespace create WAITLIST_KV
+```
+
+2. Update `wrangler.jsonc` files with your namespace IDs
+
+3. Set secrets:
+```bash
+cd apps/mcp
+wrangler secret put GITHUB_CLIENT_ID
+wrangler secret put GITHUB_CLIENT_SECRET
+wrangler secret put SOLID_SIGNING_KEY
+wrangler secret put METRICS_KEY
+```
+
+### Development
+
+```bash
+# Run MCP server
+cd apps/mcp
+yarn dev
+
+# Run web app
+cd apps/web
+yarn dev
+```
+
+### Deployment
+
+```bash
+# Deploy MCP server
+cd apps/mcp
+yarn deploy
+
+# Deploy web app
+cd apps/web
+yarn deploy
+```
+
+## MCP Tools
+
+- `solid_fetch_vitals`: Retrieve vital signs from Solid Pod
+- `vitals_scan`: Analyze health trends and provide insights
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+MIT - see [LICENSE](LICENSE)
