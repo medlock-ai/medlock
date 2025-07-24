@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["./cloudflare-env.d.ts", "node", "@testing-library/jest-dom", "vitest/globals"]
+  },
+  "include": ["test/**/*", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"]
+}
