@@ -14,10 +14,10 @@
 3. Fill in the application details:
 
    - **Application name**: HealthMCP Development
-   - **Homepage URL**: https://healthmcp.ai
+   - **Homepage URL**: https://your-domain.com
    - **Application description**: Health monitoring MCP server with Solid Pod integration
    - **Authorization callback URLs**:
-     - https://api.healthmcp.ai/auth/callback
+     - https://api.your-domain.com/auth/callback
      - http://localhost:8787/auth/callback
 
 4. Click "Register application"

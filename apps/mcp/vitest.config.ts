@@ -20,7 +20,7 @@ export default defineWorkersConfig({
           compatibilityFlags: ['nodejs_compat', 'rpc'],
           bindings: {
             MCP_VERSION: 'v0.1.0-test',
-            ALLOWED_ORIGINS: 'https://healthmcp.ai',
+            ALLOWED_ORIGINS: 'https://your-domain.com',
             SOLID_POD_DOMAIN: 'storage.solidpod.com',
             GITHUB_CLIENT_ID: 'test-client-id',
             GITHUB_CLIENT_SECRET: 'test-client-secret',

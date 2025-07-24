@@ -241,7 +241,7 @@ healthmcp/
       },
     ],
   },
-  "routes": [{ "pattern": "api.healthmcp.ai/*", "zone_name": "healthmcp.ai" }],
+  "routes": [{ "pattern": "api.your-domain.com/*", "zone_name": "your-domain.com" }],
 }
 ```
 

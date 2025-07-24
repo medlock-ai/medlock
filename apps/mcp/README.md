@@ -193,7 +193,7 @@ Please open an issue or submit a pull request with details.
 ### Metrics Endpoint
 
 ```bash
-curl https://api.healthmcp.ai/metrics \
+curl https://api.your-domain.com/metrics \
   -H "Authorization: Bearer $METRICS_KEY"
 ```
 

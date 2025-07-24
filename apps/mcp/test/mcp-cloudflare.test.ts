@@ -61,7 +61,7 @@ describe('Cloudflare MCP Implementation', () => {
   describe('McpAgent Integration', () => {
     it('should use McpAgent.serve() for handling MCP requests', async () => {
       const response = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -91,7 +91,7 @@ describe('Cloudflare MCP Implementation', () => {
     it('should maintain session state across requests', async () => {
       // Initialize session
       const initResponse = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -118,7 +118,7 @@ describe('Cloudflare MCP Implementation', () => {
 
       // Make another request with the session ID
       const listResponse = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -149,7 +149,7 @@ describe('Cloudflare MCP Implementation', () => {
       for (let i = 0; i < 5; i++) {
         requests.push(
           worker.fetch(
-            new Request('https://api.healthmcp.ai/api/mcp', {
+            new Request('https://api.your-domain.com/api/mcp', {
               method: 'POST',
               headers: {
                 Cookie: `hc_session=${sessionId}`,
@@ -204,7 +204,7 @@ describe('Cloudflare MCP Implementation', () => {
     it('should store MCP session mapping in KV', async () => {
       // Initialize MCP session
       const response = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -239,7 +239,7 @@ describe('Cloudflare MCP Implementation', () => {
   describe('Security Features', () => {
     it('should enforce authentication', async () => {
       const response = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -261,7 +261,7 @@ describe('Cloudflare MCP Implementation', () => {
 
     it('should set security headers', async () => {
       const response = await worker.fetch(
-        new Request('https://api.healthmcp.ai/health'),
+        new Request('https://api.your-domain.com/health'),
         env,
         createExecutionContext()
       )
@@ -276,7 +276,7 @@ describe('Cloudflare MCP Implementation', () => {
   describe('Error Handling', () => {
     it('should handle invalid JSON gracefully', async () => {
       const response = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -297,7 +297,7 @@ describe('Cloudflare MCP Implementation', () => {
 
     it('should handle missing session gracefully', async () => {
       const response = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,

@@ -1,6 +1,6 @@
 {
-  "name": "HealthMCP Development",
-  "url": "https://healthmcp.ai",
+  "name": "MCP Development",
+  "url": "https://your-domain.com",
   "description": "Health monitoring MCP server with Solid Pod integration",
-  "callback_urls": ["https://api.healthmcp.ai/auth/callback", "http://localhost:8787/auth/callback"]
+  "callback_urls": ["https://api.your-domain.com/auth/callback", "http://localhost:8787/auth/callback"]
 }

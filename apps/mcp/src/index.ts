@@ -41,7 +41,7 @@ app.use(
   '/api/*',
   cors({
     origin: (origin) => {
-      const allowedOrigins = ['https://healthmcp.ai', 'https://chat.openai.com']
+      const allowedOrigins = ['https://your-domain.com', 'https://chat.openai.com']
       if (!origin || allowedOrigins.includes(origin)) {
         return origin || allowedOrigins[0]
       }
@@ -92,7 +92,7 @@ app.get('/metrics', async (c) => {
 const getGitHubAuthUrl = (env: Bindings, state: string) => {
   const params = new URLSearchParams({
     client_id: env.GITHUB_CLIENT_ID,
-    redirect_uri: `${env.BASE_URL || 'https://api.healthmcp.ai'}/auth/callback`,
+    redirect_uri: `${env.BASE_URL || 'https://api.your-domain.com'}/auth/callback`,
     scope: 'user:email',
     state: state,
   })
@@ -213,7 +213,7 @@ app.get('/auth/callback', async (c) => {
     })
 
     // Redirect to success page
-    return c.redirect(`${c.env.BASE_URL || 'https://healthmcp.ai'}/auth/success`)
+    return c.redirect(`${c.env.BASE_URL || 'https://your-domain.com'}/auth/success`)
   } catch (error) {
     console.error('OAuth error:', error)
     return c.json({ error: 'Authentication failed' }, 500)

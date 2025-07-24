@@ -41,7 +41,7 @@ describe('MCP Integration Tests', () => {
   // Helper to initialize MCP session
   async function initializeMcpSession(): Promise<string> {
     const response = await worker.fetch(
-      new Request('https://api.healthmcp.ai/api/mcp', {
+      new Request('https://api.your-domain.com/api/mcp', {
         method: 'POST',
         headers: {
           Cookie: `hc_session=${sessionId}`,
@@ -100,7 +100,7 @@ describe('MCP Integration Tests', () => {
     it('should handle full MCP session lifecycle', async () => {
       // 1. Initialize MCP session
       const initResponse = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -128,7 +128,7 @@ describe('MCP Integration Tests', () => {
 
       // 2. List available tools
       const listResponse = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -152,7 +152,7 @@ describe('MCP Integration Tests', () => {
 
       // 3. Execute a tool
       const toolResponse = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -187,7 +187,7 @@ describe('MCP Integration Tests', () => {
       for (let i = 0; i < 3; i++) {
         requests.push(
           worker.fetch(
-            new Request('https://api.healthmcp.ai/api/mcp', {
+            new Request('https://api.your-domain.com/api/mcp', {
               method: 'POST',
               headers: {
                 Cookie: `hc_session=${sessionId}`,
@@ -221,7 +221,7 @@ describe('MCP Integration Tests', () => {
   describe('Error Recovery', () => {
     it('should handle invalid session gracefully', async () => {
       const response = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -252,7 +252,7 @@ describe('MCP Integration Tests', () => {
       for (let i = 0; i < 5; i++) {
         requests.push(
           worker.fetch(
-            new Request('https://api.healthmcp.ai/api/mcp', {
+            new Request('https://api.your-domain.com/api/mcp', {
               method: 'POST',
               headers: {
                 Cookie: `hc_session=${sessionId}`,
@@ -296,7 +296,7 @@ describe('MCP Integration Tests', () => {
       mcpSessionId = await initializeMcpSession()
 
       const response = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -329,7 +329,7 @@ describe('MCP Integration Tests', () => {
 
     it('should require authentication for all MCP endpoints', async () => {
       const response = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -360,7 +360,7 @@ describe('MCP Integration Tests', () => {
 
       // Execute a tool
       const response = await worker.fetch(
-        new Request('https://api.healthmcp.ai/api/mcp', {
+        new Request('https://api.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -392,7 +392,7 @@ describe('MCP Integration Tests', () => {
 
     it('should expose health check endpoint', async () => {
       const response = await worker.fetch(
-        new Request('https://api.healthmcp.ai/health'),
+        new Request('https://api.your-domain.com/health'),
         env,
         createExecutionContext()
       )
