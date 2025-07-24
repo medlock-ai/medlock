@@ -24,6 +24,7 @@ yarn dev
 - ESLint for linting
 
 Run checks:
+
 ```bash
 yarn lint
 yarn format

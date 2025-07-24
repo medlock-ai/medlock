@@ -11,6 +11,7 @@ We take security seriously. If you discover a security vulnerability, please:
    - Provide detailed information about the vulnerability
 
 ### What to include:
+
 - Description of the vulnerability
 - Steps to reproduce
 - Potential impact
@@ -19,6 +20,7 @@ We take security seriously. If you discover a security vulnerability, please:
 ## Response Time
 
 We aim to:
+
 - Acknowledge reports within 48 hours
 - Provide an initial assessment within 5 business days
 - Release patches for critical vulnerabilities within 30 days

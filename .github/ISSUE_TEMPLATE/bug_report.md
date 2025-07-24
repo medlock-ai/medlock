@@ -16,6 +16,7 @@ Steps to reproduce the behavior.
 What you expected to happen.
 
 **Environment**
+
 - OS: [e.g. macOS]
 - Browser: [e.g. Chrome]
 - Version: [e.g. 1.0.0]
