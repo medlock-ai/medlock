@@ -90,7 +90,9 @@
       "Bash(rm:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(test -f yarn.lock)",
+      "Bash(grep:*)"
     ],
     "deny": []
   }
