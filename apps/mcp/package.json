@@ -26,21 +26,21 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.8.43",
-    "@cloudflare/workers-types": "^4.20241205.0",
-    "@types/node": "^20.11.5",
-    "@typescript-eslint/eslint-plugin": "^8.20.0",
-    "@typescript-eslint/parser": "^8.20.0",
+    "@cloudflare/vitest-pool-workers": "^0.8.56",
+    "@cloudflare/workers-types": "^4.20250724.0",
+    "@types/node": "^24.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/runner": "^3.2.4",
     "@vitest/snapshot": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "eslint": "^9.31.0",
-    "prettier": "^3.5.3",
+    "prettier": "^3.6.2",
     "react": "^19.0.0",
     "typescript": "^5.6.3",
     "vitest": "^3.2.4",
-    "wrangler": "^4.20.5"
+    "wrangler": "^4.25.1"
   },
   "engines": {
     "node": ">=18"
