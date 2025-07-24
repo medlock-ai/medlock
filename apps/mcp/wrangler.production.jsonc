@@ -1,0 +1,106 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "medlock-mcp-server",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-06-21",
+  "compatibility_flags": ["nodejs_compat"],
+
+  /**
+   * KV Namespaces for data storage
+   * Note: You'll need to create these namespaces and update the IDs
+   * Run: wrangler kv namespace create TOKENS
+   * Run: wrangler kv namespace create AUDIT
+   */
+  "kv_namespaces": [
+    {
+      "binding": "TOKENS",
+      "id": "e1a58b0c701f447fa6b612b57253fcaa",
+      "preview_id": "054f9e43724148e5b02ef88e2ded3236",
+    },
+    {
+      "binding": "AUDIT",
+      "id": "17cf1513be614f7bad48dec0313750ba",
+      "preview_id": "8d057aae43c94933966a8939d7381d7a",
+    },
+  ],
+
+  /**
+   * Durable Objects for rate limiting and MCP agents
+   */
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "RATE_LIMITER",
+        "class_name": "RateLimiter",
+      },
+      {
+        "name": "MCP_AGENT",
+        "class_name": "HealthMcpAgent",
+      },
+    ],
+  },
+
+  /**
+   * Migrations for SQLite-enabled Durable Objects
+   */
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["HealthMcpAgent", "RateLimiter"],
+    },
+  ],
+
+  /**
+   * Custom domain routing
+   * Update with your domain or use workers.dev subdomain
+   */
+  "routes": [
+    {
+      "pattern": "api.medlock.ai",
+      "custom_domain": true,
+    },
+  ],
+
+  /**
+   * Environment variables
+   */
+  "vars": {
+    "MCP_VERSION": "v0.1.0",
+    "ALLOWED_ORIGINS": "https://medlock.ai,https://chat.openai.com,https://claude.ai",
+    "SOLID_POD_DOMAIN": "storage.solidpod.com",
+  },
+
+  /**
+   * Development settings
+   */
+  "dev": {
+    "port": 8788,
+    "local_protocol": "https",
+    "upstream_protocol": "https",
+  },
+
+  /**
+   * Observability
+   */
+  "observability": {
+    "enabled": true,
+  },
+
+  /**
+   * Staging environment
+   */
+  "env": {
+    "staging": {
+      "name": "medlock-mcp-staging",
+      "routes": [
+        {
+          "pattern": "api-staging.medlock.ai",
+          "custom_domain": true,
+        },
+      ],
+      "vars": {
+        "MCP_VERSION": "v0.1.0-staging",
+      },
+    },
+  },
+}

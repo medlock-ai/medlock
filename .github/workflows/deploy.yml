@@ -1,0 +1,68 @@
+name: Deploy to Cloudflare
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy-mcp:
+    name: Deploy MCP Server
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Enable Corepack
+        run: corepack enable
+        
+      - name: Install dependencies
+        run: yarn install --immutable
+        
+      - name: Deploy MCP to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: apps/mcp
+          command: deploy -c wrangler.production.jsonc
+          secrets: |
+            GITHUB_CLIENT_ID
+            GITHUB_CLIENT_SECRET
+            SOLID_SIGNING_KEY
+            METRICS_KEY
+        env:
+          GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+          SOLID_SIGNING_KEY: ${{ secrets.SOLID_SIGNING_KEY }}
+          METRICS_KEY: ${{ secrets.METRICS_KEY }}
+
+  deploy-web:
+    name: Deploy Web App
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Enable Corepack
+        run: corepack enable
+        
+      - name: Install dependencies
+        run: yarn install --immutable
+        
+      - name: Build Web App
+        run: cd apps/web && yarn build:cloudflare
+        
+      - name: Deploy Web to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: apps/web
+          command: pages deploy .open-next --project-name=medlock-web

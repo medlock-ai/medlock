@@ -31,14 +31,11 @@ Save the IDs.
 
 ## 3. Configure
 
-Copy the local configs to create production configs:
+Update the production configs with your KV IDs and domain:
+- `apps/mcp/wrangler.production.jsonc`
+- `apps/web/wrangler.production.jsonc`
 
-```bash
-cp apps/mcp/wrangler.local.jsonc apps/mcp/wrangler.production.jsonc
-cp apps/web/wrangler.local.jsonc apps/web/wrangler.production.jsonc
-```
-
-Update production configs with your KV IDs and domain. Production configs are gitignored.
+Commit these files - they're needed for GitHub Actions deployment.
 
 ## 4. DNS
 
@@ -76,13 +73,24 @@ const allowedOrigins = ['https://your-domain.com', 'https://chat.openai.com']
 
 ## 8. Deploy
 
+### Local Deployment
 ```bash
 # API
-cd apps/mcp && wrangler deploy
+cd apps/mcp && wrangler deploy -c wrangler.production.jsonc
 
 # Web
 cd ../web && wrangler pages deploy .open-next
 ```
+
+### GitHub Actions Deployment
+Add these secrets to your GitHub repository:
+- `CLOUDFLARE_API_TOKEN` - Your Cloudflare API token
+- `GITHUB_CLIENT_ID` - From step 5
+- `GITHUB_CLIENT_SECRET` - From step 5
+- `SOLID_SIGNING_KEY` - Your 32+ char key
+- `METRICS_KEY` - Your metrics API key
+
+Push to main branch to deploy automatically.
 
 ## 9. Verify
 

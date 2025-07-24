@@ -39,7 +39,6 @@ next-env.d.ts
 .wrangler/
 .open-next/
 .dev.vars
-**/wrangler.production.jsonc
 
 # IDE
 .vscode/
