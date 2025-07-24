@@ -23,6 +23,15 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Upload MCP Secrets
+        run: |
+          cd apps/mcp
+          echo "${{ secrets.OAUTH_CLIENT_ID }}" | npx wrangler secret put OAUTH_CLIENT_ID --name medlock-mcp-server --env="" --no-interaction
+          echo "${{ secrets.OAUTH_CLIENT_SECRET }}" | npx wrangler secret put OAUTH_CLIENT_SECRET --name medlock-mcp-server --env="" --no-interaction
+          echo "${{ secrets.SOLID_SIGNING_KEY }}" | npx wrangler secret put SOLID_SIGNING_KEY --name medlock-mcp-server --env="" --no-interaction
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
       - name: Deploy MCP to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
@@ -30,14 +39,6 @@ jobs:
           workingDirectory: apps/mcp
           command: deploy -c wrangler.production.jsonc
           packageManager: yarn
-          secrets: |
-            OAUTH_CLIENT_ID
-            OAUTH_CLIENT_SECRET
-            SOLID_SIGNING_KEY
-        env:
-          OAUTH_CLIENT_ID: ${{ secrets.OAUTH_CLIENT_ID }}
-          OAUTH_CLIENT_SECRET: ${{ secrets.OAUTH_CLIENT_SECRET }}
-          SOLID_SIGNING_KEY: ${{ secrets.SOLID_SIGNING_KEY }}
 
   deploy-web:
     name: Deploy Web App
