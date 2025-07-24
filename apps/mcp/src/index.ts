@@ -41,7 +41,9 @@ app.use(
   '/api/*',
   cors({
     origin: (origin, c) => {
-      const allowedOrigins = [c.env.ALLOWED_ORIGINS?.split(',') || ['https://medlock.ai', 'https://chat.openai.com']].flat()
+      const allowedOrigins = [
+        c.env.ALLOWED_ORIGINS?.split(',') || ['https://medlock.ai', 'https://chat.openai.com'],
+      ].flat()
       if (!origin || allowedOrigins.includes(origin)) {
         return origin || allowedOrigins[0]
       }
