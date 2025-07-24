@@ -47,6 +47,7 @@ yarn install
 1. **Authenticate**: `wrangler login`
 
 2. **Create KV namespaces**:
+
 ```bash
 # MCP server
 cd apps/mcp
@@ -59,24 +60,29 @@ wrangler kv namespace create WAITLIST_KV
 ```
 
 3. **Update configs** with your KV IDs and domain:
+
 - `apps/mcp/wrangler.production.jsonc`
 - `apps/web/wrangler.production.jsonc`
 
 4. **Configure DNS** (Cloudflare Dashboard):
+
 - `@` → your-worker.workers.dev (CNAME, proxied)
 - `api` → your-mcp-worker.workers.dev (CNAME, proxied)
 
 5. **Create GitHub OAuth App** ([github.com/settings/developers](https://github.com/settings/developers)):
+
 - Homepage: `https://your-domain.com`
 - Callback: `https://api.your-domain.com/auth/callback`
 
 6. **Generate secure signing key**:
+
 ```bash
 # Generate a cryptographically secure 256-bit key (Solid spec recommendation)
 openssl rand -base64 32
 ```
 
 7. **Set secrets**:
+
 ```bash
 cd apps/mcp
 # For production environment (top-level)
@@ -91,6 +97,7 @@ wrangler secret put SOLID_SIGNING_KEY --env=staging
 ```
 
 8. **Configure allowed origins** in `wrangler.production.jsonc`:
+
 ```jsonc
 "ALLOWED_ORIGINS": "https://your-domain.com,https://chat.openai.com,https://claude.ai"
 ```
@@ -112,6 +119,7 @@ yarn dev
 **GitHub Actions** (recommended):
 
 1. **Generate Cloudflare API Token**:
+
    - Log in to [Cloudflare dashboard](https://dash.cloudflare.com)
    - Go to "My Profile" → "API Tokens" → "Create Token"
    - Select "Edit Cloudflare Workers" template → "Use template"
@@ -119,6 +127,7 @@ yarn dev
    - Create token and copy the value
 
 2. **Add repository secrets** (Settings → Secrets → Actions):
+
    - `CLOUDFLARE_API_TOKEN` - Your API token from step 1
    - `OAUTH_CLIENT_ID` - GitHub OAuth app client ID
    - `OAUTH_CLIENT_SECRET` - GitHub OAuth app client secret
@@ -127,11 +136,12 @@ yarn dev
 3. **Push to main branch** - GitHub Actions will deploy automatically
 
 **Local deployment**:
+
 ```bash
 # Build and deploy MCP server
 cd apps/mcp && wrangler deploy -c wrangler.production.jsonc
 
-# Build and deploy web app  
+# Build and deploy web app
 cd apps/web && yarn deploy
 ```
 
