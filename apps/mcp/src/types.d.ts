@@ -14,7 +14,6 @@ export interface Bindings {
   GITHUB_CLIENT_ID: string
   GITHUB_CLIENT_SECRET: string
   SOLID_SIGNING_KEY: string
-  METRICS_KEY: string
   BASE_URL?: string
   MCP_VERSION?: string
   ALLOWED_ORIGINS?: string

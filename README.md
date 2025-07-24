@@ -65,7 +65,6 @@ cd apps/mcp
 wrangler secret put GITHUB_CLIENT_ID
 wrangler secret put GITHUB_CLIENT_SECRET
 wrangler secret put SOLID_SIGNING_KEY
-wrangler secret put METRICS_KEY
 ```
 
 ### Development

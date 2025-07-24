@@ -25,7 +25,6 @@ export default defineWorkersConfig({
             GITHUB_CLIENT_ID: 'test-client-id',
             GITHUB_CLIENT_SECRET: 'test-client-secret',
             SOLID_SIGNING_KEY: 'test-signing-key-32-chars-minimum',
-            METRICS_KEY: 'test-metrics-key',
           },
           kvNamespaces: {
             TOKENS: 'TOKENS',

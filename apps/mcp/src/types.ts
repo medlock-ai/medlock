@@ -12,7 +12,6 @@ export interface Bindings {
   GITHUB_CLIENT_SECRET: string
   BASE_URL?: string
   MCP_VERSION?: string
-  METRICS_KEY?: string
 }
 
 export interface SessionData {

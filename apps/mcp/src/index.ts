@@ -67,26 +67,12 @@ app.get('/test-auth', authMiddleware, (c) => {
   return c.json({ message: 'Authenticated', userId: c.get('userId') })
 })
 
-// Metrics endpoint (protected)
-app.get('/metrics', async (c) => {
-  const authHeader = c.req.header('Authorization')
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return c.json({ error: 'Unauthorized' }, 401)
-  }
-
-  const token = authHeader.substring(7)
-  if (token !== c.env.METRICS_KEY) {
-    return c.json({ error: 'Invalid token' }, 403)
-  }
-
-  // TODO: Implement actual metrics collection
-  return c.json({
-    mcp_requests_total: 0,
-    mcp_tool_duration_seconds: {},
-    mcp_errors_total: 0,
-    mcp_active_sessions: 0,
-  })
-})
+// Metrics are handled by Cloudflare Analytics
+// Access via Cloudflare Dashboard or GraphQL API:
+// - Workers Analytics for request metrics
+// - Durable Objects Analytics for session metrics
+// - Logpush for detailed logs
+// No public metrics endpoint needed
 
 // GitHub OAuth helper functions
 const getGitHubAuthUrl = (env: Bindings, state: string) => {

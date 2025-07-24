@@ -33,12 +33,10 @@ jobs:
             GITHUB_CLIENT_ID
             GITHUB_CLIENT_SECRET
             SOLID_SIGNING_KEY
-            METRICS_KEY
         env:
           GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
           GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
           SOLID_SIGNING_KEY: ${{ secrets.SOLID_SIGNING_KEY }}
-          METRICS_KEY: ${{ secrets.METRICS_KEY }}
 
   deploy-web:
     name: Deploy Web App

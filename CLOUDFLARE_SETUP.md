@@ -60,7 +60,6 @@ cd apps/mcp
 wrangler secret put GITHUB_CLIENT_ID
 wrangler secret put GITHUB_CLIENT_SECRET  
 wrangler secret put SOLID_SIGNING_KEY      # 32+ chars
-wrangler secret put METRICS_KEY            # any string
 ```
 
 ## 7. Origins
@@ -88,7 +87,6 @@ Add these secrets to your GitHub repository:
 - `GITHUB_CLIENT_ID` - From step 5
 - `GITHUB_CLIENT_SECRET` - From step 5
 - `SOLID_SIGNING_KEY` - Your 32+ char key
-- `METRICS_KEY` - Your metrics API key
 
 Push to main branch to deploy automatically.
 
@@ -96,7 +94,7 @@ Push to main branch to deploy automatically.
 
 - Health: `https://api.your-domain.com/health`
 - Logs: `wrangler tail`
-- Metrics: `curl https://api.your-domain.com/metrics -H "Authorization: Bearer YOUR_KEY"`
+- Metrics: Cloudflare Dashboard → Workers → Analytics
 
 ## Local Development
 
