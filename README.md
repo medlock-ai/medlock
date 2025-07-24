@@ -119,7 +119,6 @@ yarn dev
 **GitHub Actions** (recommended):
 
 1. **Generate Cloudflare API Token**:
-
    - Log in to [Cloudflare dashboard](https://dash.cloudflare.com)
    - Go to "My Profile" → "API Tokens" → "Create Token"
    - Select "Edit Cloudflare Workers" template → "Use template"
@@ -127,7 +126,6 @@ yarn dev
    - Create token and copy the value
 
 2. **Add repository secrets** (Settings → Secrets → Actions):
-
    - `CLOUDFLARE_API_TOKEN` - Your API token from step 1
    - `OAUTH_CLIENT_ID` - GitHub OAuth app client ID
    - `OAUTH_CLIENT_SECRET` - GitHub OAuth app client secret
