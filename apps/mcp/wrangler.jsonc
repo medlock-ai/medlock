@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "healthmcp-mcp-server",
+  "name": "medlock-mcp-server",
   "main": "src/index.ts",
   "compatibility_date": "2025-06-21",
   "compatibility_flags": ["nodejs_compat"],
@@ -91,7 +91,7 @@
    */
   "env": {
     "staging": {
-      "name": "healthmcp-mcp-staging",
+      "name": "medlock-mcp-staging",
       "routes": [
         {
           "pattern": "api-staging.your-domain.com",
