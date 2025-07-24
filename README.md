@@ -79,9 +79,15 @@ openssl rand -base64 32
 7. **Set secrets**:
 ```bash
 cd apps/mcp
-wrangler secret put GITHUB_CLIENT_ID
-wrangler secret put GITHUB_CLIENT_SECRET
-wrangler secret put SOLID_SIGNING_KEY  # Use the key from step 6
+# For production environment (top-level)
+wrangler secret put GITHUB_CLIENT_ID --env=""
+wrangler secret put GITHUB_CLIENT_SECRET --env=""
+wrangler secret put SOLID_SIGNING_KEY --env=""  # Use the key from step 6
+
+# For staging environment (if needed)
+wrangler secret put GITHUB_CLIENT_ID --env=staging
+wrangler secret put GITHUB_CLIENT_SECRET --env=staging
+wrangler secret put SOLID_SIGNING_KEY --env=staging
 ```
 
 8. **Configure allowed origins** in `wrangler.production.jsonc`:
