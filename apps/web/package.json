@@ -1,7 +1,6 @@
 {
   "name": "@medlock/web",
   "version": "0.1.0",
-  "private": false,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
