@@ -1,20 +1,20 @@
 {
-  "name": "healthmcp",
+  "name": "medlock",
   "version": "0.1.0",
   "private": false,
   "workspaces": [
     "apps/*"
   ],
   "scripts": {
-    "dev": "yarn workspace @healthmcp/web dev",
-    "build": "yarn workspace @healthmcp/web build && yarn workspace @healthmcp/mcp build",
+    "dev": "yarn workspace @medlock/web dev",
+    "build": "yarn workspace @medlock/web build && yarn workspace @medlock/mcp build",
     "build:web": "cd apps/web && yarn build:cloudflare",
     "build:mcp": "cd apps/mcp && yarn build",
-    "dev:web": "yarn workspace @healthmcp/web dev",
-    "dev:mcp": "yarn workspace @healthmcp/mcp dev",
+    "dev:web": "yarn workspace @medlock/web dev",
+    "dev:mcp": "yarn workspace @medlock/mcp dev",
     "test": "yarn workspaces foreach -A run test",
-    "test:mcp": "yarn workspace @healthmcp/mcp test",
-    "test:web": "yarn workspace @healthmcp/web test",
+    "test:mcp": "yarn workspace @medlock/mcp test",
+    "test:web": "yarn workspace @medlock/web test",
     "typecheck": "yarn workspaces foreach -A run typecheck",
     "lint": "yarn workspaces foreach -A run lint",
     "format:check": "yarn workspaces foreach -A run format:check",

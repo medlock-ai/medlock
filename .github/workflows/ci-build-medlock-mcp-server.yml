@@ -1,4 +1,4 @@
-name: CI Build - healthmcp-mcp-server
+name: CI Build - medlock-mcp-server
 
 on:
   push:

@@ -4,12 +4,12 @@
     "site": {
       "path": ".",
       "config": "wrangler.jsonc",
-      "description": "HealthMCP marketing site (Next.js with OpenNext)"
+      "description": "Medlock marketing site (Next.js with OpenNext)"
     },
     "mcp": {
       "path": "apps/mcp",
       "config": "apps/mcp/wrangler.jsonc",
-      "description": "HealthMCP Model Context Protocol server"
+      "description": "Medlock Model Context Protocol server"
     }
   }
 }

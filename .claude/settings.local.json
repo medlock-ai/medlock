@@ -93,7 +93,8 @@
       "Bash(mkdir:*)",
       "Bash(test -f yarn.lock)",
       "Bash(grep:*)",
-      "Bash(wrangler kv namespace:*)"
+      "Bash(wrangler kv namespace:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }

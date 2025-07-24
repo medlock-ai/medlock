@@ -20,7 +20,7 @@ export class HealthMcpAgent extends McpAgent<Bindings, State, Props> {
   // through the ctx.props passed from the main handler, so we don't need to
   // override fetch() anymore
   server = new McpServer({
-    name: 'healthmcp-server',
+    name: 'medlock-server',
     version: 'v0.1.0',
   })
 

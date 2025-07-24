@@ -1,5 +1,5 @@
 {
-  "name": "@healthmcp/web",
+  "name": "@medlock/web",
   "version": "0.1.0",
   "private": false,
   "scripts": {

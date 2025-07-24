@@ -207,7 +207,7 @@ export default function HomePage() {
         }
       `}</style>
 
-      <main aria-label="HealthMCP homepage">
+      <main aria-label="Medlock homepage">
         {/* Hero Section */}
         <header
           data-testid="hero-section"
@@ -237,7 +237,7 @@ export default function HomePage() {
             </h1>
 
             <p className="mt-6 text-lg text-slate-300 max-w-2xl mx-auto">
-              HealthMCP lets you team up your favourite model—ChatGPT, Claude, or tomorrow&apos;s
+              Medlock lets you team up your favourite model—ChatGPT, Claude, or tomorrow&apos;s
               wonder‑AI—with your health records <em>on your terms</em>. Because there&apos;s simply{' '}
               <strong>no good reason</strong> to hand any company permanent, all‑access rights to
               your most personal story.
@@ -390,7 +390,7 @@ export default function HomePage() {
         </section>
 
         <footer className="py-10 text-center text-xs text-slate-500">
-          © 2025 HealthMCP • Your data, your decisions.
+          © 2025 Medlock • Your data, your decisions.
         </footer>
       </main>
 
