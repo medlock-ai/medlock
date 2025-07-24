@@ -112,15 +112,11 @@ yarn dev
 **GitHub Actions** (recommended):
 
 1. **Generate Cloudflare API Token**:
-```bash
-# Authenticate with Cloudflare
-wrangler login
-wrangler whoami  # Shows your account info
-
-# Create API token for CI/CD
-wrangler generate-api-token --json
-# Copy the "apiToken" value from the output
-```
+   - Log in to [Cloudflare dashboard](https://dash.cloudflare.com)
+   - Go to "My Profile" → "API Tokens" → "Create Token"
+   - Select "Edit Cloudflare Workers" template → "Use template"
+   - Scope to your account and zones as needed
+   - Create token and copy the value
 
 2. **Add repository secrets** (Settings → Secrets → Actions):
    - `CLOUDFLARE_API_TOKEN` - Your API token from step 1
