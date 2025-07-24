@@ -15,13 +15,13 @@
     {
       "binding": "TOKENS",
       "id": "e1a58b0c701f447fa6b612b57253fcaa",
-      "preview_id": "054f9e43724148e5b02ef88e2ded3236"
+      "preview_id": "054f9e43724148e5b02ef88e2ded3236",
     },
     {
       "binding": "AUDIT",
       "id": "17cf1513be614f7bad48dec0313750ba",
-      "preview_id": "8d057aae43c94933966a8939d7381d7a"
-    }
+      "preview_id": "8d057aae43c94933966a8939d7381d7a",
+    },
   ],
 
   /**
@@ -31,13 +31,13 @@
     "bindings": [
       {
         "name": "RATE_LIMITER",
-        "class_name": "RateLimiter",
+        "class_name": "RateLimiter"
       },
       {
         "name": "MCP_AGENT",
-        "class_name": "MedlockMcpAgent",
-      },
-    ],
+        "class_name": "MedlockMcpAgent"
+      }
+    ]
   },
 
   /**
