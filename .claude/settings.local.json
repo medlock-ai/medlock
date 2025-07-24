@@ -94,7 +94,8 @@
       "Bash(test -f yarn.lock)",
       "Bash(grep:*)",
       "Bash(wrangler kv namespace:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "WebFetch(domain:opennext.js.org)"
     ],
     "deny": []
   }

@@ -18,7 +18,7 @@ Medlock enables AI models to interact with your personal health data stored in S
 
 ```
 apps/
-├── web/          # Marketing site (Next.js on Cloudflare Pages)
+├── web/          # Marketing site (Next.js on Cloudflare Workers)
 └── mcp/          # MCP server (Hono on Cloudflare Workers)
 ```
 
@@ -35,14 +35,11 @@ apps/
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/medlock.git
+git clone https://github.com/medlock-ai/medlock.git
 cd medlock
 
 # Install dependencies
 yarn install
-
-# Set up environment
-cp .env.example .env
 ```
 
 ### Cloudflare Setup
@@ -66,24 +63,30 @@ wrangler kv namespace create WAITLIST_KV
 - `apps/web/wrangler.production.jsonc`
 
 4. **Configure DNS** (Cloudflare Dashboard):
-- `@` → your-project.pages.dev (CNAME, proxied)
-- `api` → your-project.workers.dev (CNAME, proxied)
+- `@` → your-worker.workers.dev (CNAME, proxied)
+- `api` → your-mcp-worker.workers.dev (CNAME, proxied)
 
 5. **Create GitHub OAuth App** ([github.com/settings/developers](https://github.com/settings/developers)):
 - Homepage: `https://your-domain.com`
 - Callback: `https://api.your-domain.com/auth/callback`
 
-6. **Set secrets**:
+6. **Generate secure signing key**:
+```bash
+# Generate a cryptographically secure 256-bit key (Solid spec recommendation)
+openssl rand -base64 32
+```
+
+7. **Set secrets**:
 ```bash
 cd apps/mcp
 wrangler secret put GITHUB_CLIENT_ID
 wrangler secret put GITHUB_CLIENT_SECRET
-wrangler secret put SOLID_SIGNING_KEY  # 32+ chars
+wrangler secret put SOLID_SIGNING_KEY  # Use the key from step 6
 ```
 
-7. **Update allowed origins** in `apps/mcp/src/index.ts`:
-```typescript
-const allowedOrigins = ['https://your-domain.com', 'https://chat.openai.com']
+8. **Configure allowed origins** in `wrangler.production.jsonc`:
+```jsonc
+"ALLOWED_ORIGINS": "https://your-domain.com,https://chat.openai.com,https://claude.ai"
 ```
 
 ### Development
@@ -102,19 +105,19 @@ yarn dev
 
 **GitHub Actions** (recommended):
 1. Add repository secrets:
-   - `CLOUDFLARE_API_TOKEN`
-   - `GITHUB_CLIENT_ID`
-   - `GITHUB_CLIENT_SECRET`
-   - `SOLID_SIGNING_KEY`
+   - `CLOUDFLARE_API_TOKEN` - For CI/CD deployment
+   - `GITHUB_CLIENT_ID` - OAuth app client ID
+   - `GITHUB_CLIENT_SECRET` - OAuth app client secret
+   - `SOLID_SIGNING_KEY` - Your generated signing key
 2. Push to main branch
 
 **Local deployment**:
 ```bash
-# MCP server
+# Build and deploy MCP server
 cd apps/mcp && wrangler deploy -c wrangler.production.jsonc
 
-# Web app
-cd apps/web && wrangler pages deploy .open-next
+# Build and deploy web app  
+cd apps/web && yarn deploy
 ```
 
 ## MCP Tools
