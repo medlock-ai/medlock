@@ -237,7 +237,7 @@ export default function HomePage() {
             </h1>
 
             <p className="mt-6 text-lg text-slate-300 max-w-2xl mx-auto">
-              Medlock lets you team up your favourite model—ChatGPT, Claude, or tomorrow&apos;s
+              Medlock lets you team up your favorite model—ChatGPT, Claude, or tomorrow&apos;s
               wonder‑AI—with your health records <em>on your terms</em>. Because there&apos;s simply{' '}
               <strong>no good reason</strong> to hand any company permanent, all‑access rights to
               your most personal story.

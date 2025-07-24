@@ -2804,7 +2804,7 @@ __metadata:
     "@vitest/ui": "npm:^3.2.4"
     agents: "npm:latest"
     eslint: "npm:^9.31.0"
-    hono: "npm:^4.8.3"
+    hono: "npm:^4.8.5"
     prettier: "npm:^3.6.2"
     react: "npm:^19.0.0"
     typescript: "npm:^5.6.3"
@@ -7767,10 +7767,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hono@npm:^4.8.3":
-  version: 4.8.3
-  resolution: "hono@npm:4.8.3"
-  checksum: 10c0/2b64fa612da4f53d1f2bef467a3be06c3f6fdb2dc32543241f0682a1d1a2970c716c5e4a107f5c9bc4a0fade45ae31033d23561302c75b5bdc74f4c6b9a5c3b6
+"hono@npm:^4.8.5":
+  version: 4.8.5
+  resolution: "hono@npm:4.8.5"
+  checksum: 10c0/f3d4632c92a51c8de5f5b645fbbe510c7bdab87390c3e84ee8cc3ba8e1f8912fe52444e58681307d95e45581d38a8cb178f615f73602d0acc768bf801eea18c1
   languageName: node
   linkType: hard
 
