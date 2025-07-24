@@ -8,8 +8,8 @@ export interface Bindings {
   MCP_AGENT: DurableObjectNamespace
 
   // Environment variables
-  GITHUB_CLIENT_ID: string
-  GITHUB_CLIENT_SECRET: string
+  OAUTH_CLIENT_ID: string
+  OAUTH_CLIENT_SECRET: string
   BASE_URL?: string
   MCP_VERSION?: string
 }

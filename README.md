@@ -80,13 +80,13 @@ openssl rand -base64 32
 ```bash
 cd apps/mcp
 # For production environment (top-level)
-wrangler secret put GITHUB_CLIENT_ID --env=""
-wrangler secret put GITHUB_CLIENT_SECRET --env=""
+wrangler secret put OAUTH_CLIENT_ID --env=""
+wrangler secret put OAUTH_CLIENT_SECRET --env=""
 wrangler secret put SOLID_SIGNING_KEY --env=""  # Use the key from step 6
 
 # For staging environment (if needed)
-wrangler secret put GITHUB_CLIENT_ID --env=staging
-wrangler secret put GITHUB_CLIENT_SECRET --env=staging
+wrangler secret put OAUTH_CLIENT_ID --env=staging
+wrangler secret put OAUTH_CLIENT_SECRET --env=staging
 wrangler secret put SOLID_SIGNING_KEY --env=staging
 ```
 
@@ -110,12 +110,26 @@ yarn dev
 ### Deployment
 
 **GitHub Actions** (recommended):
-1. Add repository secrets:
-   - `CLOUDFLARE_API_TOKEN` - For CI/CD deployment
-   - `GITHUB_CLIENT_ID` - OAuth app client ID
-   - `GITHUB_CLIENT_SECRET` - OAuth app client secret
+
+1. **Generate Cloudflare API Token**:
+```bash
+# Option 1: Use wrangler to open token creation page
+wrangler login
+wrangler whoami  # Verify authentication
+
+# Option 2: Create manually at https://dash.cloudflare.com/profile/api-tokens
+# Required permissions:
+# - Account: Cloudflare Workers Scripts:Edit
+# - Zone: Workers Routes:Edit (for custom domains)
+```
+
+2. **Add repository secrets** (Settings → Secrets → Actions):
+   - `CLOUDFLARE_API_TOKEN` - Your API token from step 1
+   - `OAUTH_CLIENT_ID` - GitHub OAuth app client ID
+   - `OAUTH_CLIENT_SECRET` - GitHub OAuth app client secret
    - `SOLID_SIGNING_KEY` - Your generated signing key
-2. Push to main branch
+
+3. **Push to main branch** - GitHub Actions will deploy automatically
 
 **Local deployment**:
 ```bash

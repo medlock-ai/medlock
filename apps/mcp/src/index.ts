@@ -77,7 +77,7 @@ app.get('/test-auth', authMiddleware, (c) => {
 // GitHub OAuth helper functions
 const getGitHubAuthUrl = (env: Bindings, state: string) => {
   const params = new URLSearchParams({
-    client_id: env.GITHUB_CLIENT_ID,
+    client_id: env.OAUTH_CLIENT_ID,
     redirect_uri: `${env.BASE_URL || 'https://api.medlock.ai'}/auth/callback`,
     scope: 'user:email',
     state: state,
@@ -94,8 +94,8 @@ const exchangeGitHubCode = async (env: Bindings, code: string) => {
       'User-Agent': 'Medlock/1.0',
     },
     body: JSON.stringify({
-      client_id: env.GITHUB_CLIENT_ID,
-      client_secret: env.GITHUB_CLIENT_SECRET,
+      client_id: env.OAUTH_CLIENT_ID,
+      client_secret: env.OAUTH_CLIENT_SECRET,
       code: code,
     }),
   })

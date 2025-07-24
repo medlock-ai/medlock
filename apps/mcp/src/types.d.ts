@@ -11,8 +11,8 @@ export interface Bindings {
   AI: Ai
 
   // Environment variables
-  GITHUB_CLIENT_ID: string
-  GITHUB_CLIENT_SECRET: string
+  OAUTH_CLIENT_ID: string
+  OAUTH_CLIENT_SECRET: string
   SOLID_SIGNING_KEY: string
   BASE_URL?: string
   MCP_VERSION?: string
