@@ -353,7 +353,7 @@ describe('HomePage', () => {
     it('has proper ARIA labels and descriptions', () => {
       render(<HomePage />)
 
-      expect(screen.getByRole('main')).toHaveAttribute('aria-label', 'HealthMCP homepage')
+      expect(screen.getByRole('main')).toHaveAttribute('aria-label', 'Medlock homepage')
       expect(screen.getByRole('form')).toHaveAttribute('aria-label', 'Join waitlist')
       expect(screen.getByLabelText(/Email address/i)).toBeInTheDocument()
     })

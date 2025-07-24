@@ -33,7 +33,7 @@ export default defineWorkersConfig({
           durableObjects: {
             RATE_LIMITER: 'RateLimiter',
             MCP_AGENT: {
-              className: 'HealthMcpAgent',
+              className: 'MedlockMcpAgent',
               useSQLite: true,
             },
           },

@@ -143,7 +143,7 @@ describe('MCP Protocol Implementation', () => {
           resources: {},
         },
         serverInfo: {
-          name: 'healthmcp-server',
+          name: 'medlock-server',
           version: expect.any(String),
         },
       })

@@ -6,7 +6,7 @@ import { getCookie, setCookie } from 'hono/cookie'
 import type { Bindings } from './types'
 import { authMiddleware } from './middleware/auth'
 import { rateLimitMiddleware } from './middleware/rate-limit'
-import { HealthMcpAgent } from './mcp-agent'
+import { MedlockMcpAgent } from './mcp-agent'
 
 // Create Hono app
 const app = new Hono<{ Bindings: Bindings }>()
@@ -91,7 +91,7 @@ const exchangeGitHubCode = async (env: Bindings, code: string) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'User-Agent': 'HealthMCP/1.0',
+      'User-Agent': 'Medlock/1.0',
     },
     body: JSON.stringify({
       client_id: env.GITHUB_CLIENT_ID,
@@ -118,7 +118,7 @@ const getGitHubUserInfo = async (accessToken: string): Promise<GitHubUserInfo> =
     headers: {
       Authorization: `Bearer ${accessToken}`,
       Accept: 'application/vnd.github.v3+json',
-      'User-Agent': 'HealthMCP/1.0',
+      'User-Agent': 'Medlock/1.0',
     },
   })
 
@@ -228,7 +228,7 @@ app.post('/auth/logout', async (c) => {
 
 // Create the MCP handler using McpAgent's serve method
 // This properly handles the Streamable HTTP protocol
-const mcpHandler = HealthMcpAgent.serve('/api/mcp', {
+const mcpHandler = MedlockMcpAgent.serve('/api/mcp', {
   binding: 'MCP_AGENT',
   corsOptions: {
     origin: '*', // We handle CORS at the app level
@@ -367,7 +367,7 @@ export default {
 
 // Export Durable Objects
 export { RateLimiter } from './durable-objects/rate-limiter'
-export { HealthMcpAgent } from './mcp-agent'
+export { MedlockMcpAgent } from './mcp-agent'
 
 // Cleanup function for expired sessions
 async function cleanupExpiredSessions(env: Bindings) {

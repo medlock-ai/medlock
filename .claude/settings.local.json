@@ -95,7 +95,8 @@
       "Bash(grep:*)",
       "Bash(wrangler kv namespace:*)",
       "Bash(mv:*)",
-      "WebFetch(domain:opennext.js.org)"
+      "WebFetch(domain:opennext.js.org)",
+      "Bash(diff:*)"
     ],
     "deny": []
   }

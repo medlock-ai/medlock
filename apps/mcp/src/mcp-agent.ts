@@ -15,7 +15,7 @@ type Props = {
   accessToken: string
 }
 
-export class HealthMcpAgent extends McpAgent<Bindings, State, Props> {
+export class MedlockMcpAgent extends McpAgent<Bindings, State, Props> {
   // The props will be automatically initialized by the McpAgent.serve() method
   // through the ctx.props passed from the main handler, so we don't need to
   // override fetch() anymore
