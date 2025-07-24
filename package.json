@@ -22,7 +22,7 @@
     "build:cloudflare": "cd apps/web && yarn build:cloudflare",
     "deploy": "cd apps/web && yarn deploy",
     "preview": "cd apps/web && yarn preview",
-    "deploy:mcp": "cd apps/mcp && npx wrangler deploy -c wrangler.jsonc --env=''",
+    "deploy:mcp": "cd apps/mcp && npx wrangler deploy -c wrangler.production.jsonc",
     "ci:build:mcp": "echo 'Building MCP Server - No compilation required for Workers'",
     "ci:build:web": "yarn install && cd apps/web && yarn build:cloudflare",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts",

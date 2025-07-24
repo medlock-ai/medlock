@@ -31,15 +31,14 @@ Save the IDs.
 
 ## 3. Configure
 
-Update both `wrangler.jsonc` files with your KV IDs and domain:
+Copy the local configs to create production configs:
 
-```json
-// apps/mcp/wrangler.jsonc
-"routes": [{ "pattern": "api.your-domain.com", "custom_domain": true }]
-
-// apps/web/wrangler.jsonc  
-"routes": [{ "pattern": "your-domain.com", "custom_domain": true }]
+```bash
+cp apps/mcp/wrangler.local.jsonc apps/mcp/wrangler.production.jsonc
+cp apps/web/wrangler.local.jsonc apps/web/wrangler.production.jsonc
 ```
+
+Update production configs with your KV IDs and domain. Production configs are gitignored.
 
 ## 4. DNS
 

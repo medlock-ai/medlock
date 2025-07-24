@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "healthmcp-mcp-server",
+  "name": "medlock-mcp-local",
   "main": "src/index.ts",
   "compatibility_date": "2025-06-21",
   "compatibility_flags": ["nodejs_compat"],
@@ -50,23 +50,14 @@
     },
   ],
 
-  /**
-   * Custom domain routing
-   * Update with your domain or use workers.dev subdomain
-   */
-  "routes": [
-    {
-      "pattern": "api.your-domain.com",
-      "custom_domain": true,
-    },
-  ],
+  // No routes for local development
 
   /**
    * Environment variables
    */
   "vars": {
     "MCP_VERSION": "v0.1.0",
-    "ALLOWED_ORIGINS": "https://chat.openai.com,https://claude.ai",
+    "ALLOWED_ORIGINS": "http://localhost:3000,http://localhost:8787",
     "SOLID_POD_DOMAIN": "storage.solidpod.com",
   },
 
@@ -86,21 +77,5 @@
     "enabled": true,
   },
 
-  /**
-   * Staging environment
-   */
-  "env": {
-    "staging": {
-      "name": "healthmcp-mcp-staging",
-      "routes": [
-        {
-          "pattern": "api-staging.your-domain.com",
-          "custom_domain": true,
-        },
-      ],
-      "vars": {
-        "MCP_VERSION": "v0.1.0-staging",
-      },
-    },
-  },
+  // No staging environment for local config
 }

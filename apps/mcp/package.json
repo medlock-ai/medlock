@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "wrangler dev -c wrangler.jsonc",
+    "dev": "wrangler dev -c wrangler.local.jsonc",
     "build": "echo 'Building MCP Server - No compilation required for Workers'",
     "test": "vitest",
     "test:ui": "vitest --ui",
@@ -14,9 +14,9 @@
     "lint": "eslint src test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "deploy": "wrangler deploy -c wrangler.jsonc --env=''",
-    "deploy:staging": "wrangler deploy -c wrangler.jsonc --env staging",
-    "tail": "wrangler tail -c wrangler.jsonc"
+    "deploy": "wrangler deploy -c wrangler.production.jsonc",
+    "deploy:staging": "wrangler deploy -c wrangler.production.jsonc --env staging",
+    "tail": "wrangler tail -c wrangler.production.jsonc"
   },
   "dependencies": {
     "@cloudflare/ai": "^1.2.2",

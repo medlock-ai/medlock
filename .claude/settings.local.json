@@ -92,7 +92,8 @@
       "Bash(git commit:*)",
       "Bash(mkdir:*)",
       "Bash(test -f yarn.lock)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(wrangler kv namespace:*)"
     ],
     "deny": []
   }

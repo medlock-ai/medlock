@@ -1,8 +1,0 @@
-.next
-.open-next
-node_modules
-coverage
-dist
-build
-*.min.js
-*.min.css

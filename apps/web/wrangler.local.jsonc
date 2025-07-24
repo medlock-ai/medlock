@@ -4,7 +4,7 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "healthmcp",
+  "name": "medlock-web-local",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-03-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
@@ -15,16 +15,7 @@
   "observability": {
     "enabled": true,
   },
-  /**
-   * Custom Domains
-   * https://developers.cloudflare.com/workers/configuration/routing/custom-domains/
-   */
-  /**
-   * Update with your custom domain or use workers.dev subdomain
-   */
-  "routes": [
-    { "pattern": "your-domain.com", "custom_domain": true },
-  ],
+  // No routes for local development
   /**
    * Smart Placement
    * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
