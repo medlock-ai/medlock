@@ -41,9 +41,7 @@ jobs:
           cd ../mcp && npx eslint src test
 
       - name: Check formatting
-        run: |
-          cd apps/web && npx prettier --check .
-          cd ../mcp && npx prettier --check .
+        run: npx prettier --check .
 
       - name: Run tests
         run: |
