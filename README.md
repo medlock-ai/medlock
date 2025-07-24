@@ -47,24 +47,43 @@ cp .env.example .env
 
 ### Cloudflare Setup
 
-1. Create KV namespaces:
+1. **Authenticate**: `wrangler login`
+
+2. **Create KV namespaces**:
 ```bash
+# MCP server
 cd apps/mcp
 wrangler kv namespace create TOKENS
 wrangler kv namespace create AUDIT
 
+# Web app
 cd ../web
 wrangler kv namespace create WAITLIST_KV
 ```
 
-2. Update `wrangler.jsonc` files with your namespace IDs
+3. **Update configs** with your KV IDs and domain:
+- `apps/mcp/wrangler.production.jsonc`
+- `apps/web/wrangler.production.jsonc`
 
-3. Set secrets:
+4. **Configure DNS** (Cloudflare Dashboard):
+- `@` → your-project.pages.dev (CNAME, proxied)
+- `api` → your-project.workers.dev (CNAME, proxied)
+
+5. **Create GitHub OAuth App** ([github.com/settings/developers](https://github.com/settings/developers)):
+- Homepage: `https://your-domain.com`
+- Callback: `https://api.your-domain.com/auth/callback`
+
+6. **Set secrets**:
 ```bash
 cd apps/mcp
 wrangler secret put GITHUB_CLIENT_ID
 wrangler secret put GITHUB_CLIENT_SECRET
-wrangler secret put SOLID_SIGNING_KEY
+wrangler secret put SOLID_SIGNING_KEY  # 32+ chars
+```
+
+7. **Update allowed origins** in `apps/mcp/src/index.ts`:
+```typescript
+const allowedOrigins = ['https://your-domain.com', 'https://chat.openai.com']
 ```
 
 ### Development
@@ -81,14 +100,21 @@ yarn dev
 
 ### Deployment
 
-```bash
-# Deploy MCP server
-cd apps/mcp
-yarn deploy
+**GitHub Actions** (recommended):
+1. Add repository secrets:
+   - `CLOUDFLARE_API_TOKEN`
+   - `GITHUB_CLIENT_ID`
+   - `GITHUB_CLIENT_SECRET`
+   - `SOLID_SIGNING_KEY`
+2. Push to main branch
 
-# Deploy web app
-cd apps/web
-yarn deploy
+**Local deployment**:
+```bash
+# MCP server
+cd apps/mcp && wrangler deploy -c wrangler.production.jsonc
+
+# Web app
+cd apps/web && wrangler pages deploy .open-next
 ```
 
 ## MCP Tools

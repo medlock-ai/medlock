@@ -2,19 +2,26 @@
 
 ## Reporting Security Vulnerabilities
 
-We take security seriously. If you discover a security vulnerability, please follow these steps:
+We take security seriously. If you discover a security vulnerability, please:
 
 1. **DO NOT** open a public issue
-2. Email security details to the repository maintainer
-3. Include:
-   - Description of the vulnerability
-   - Steps to reproduce
-   - Potential impact
-   - Suggested fix (if any)
+2. Use GitHub's private vulnerability reporting:
+   - Navigate to the [Security tab](https://github.com/medlock-ai/medlock/security)
+   - Click "Report a vulnerability"
+   - Provide detailed information about the vulnerability
+
+### What to include:
+- Description of the vulnerability
+- Steps to reproduce
+- Potential impact
+- Suggested fix (if available)
 
 ## Response Time
 
-We aim to respond to security reports within 48 hours.
+We aim to:
+- Acknowledge reports within 48 hours
+- Provide an initial assessment within 5 business days
+- Release patches for critical vulnerabilities within 30 days
 
 ## Supported Versions
 
