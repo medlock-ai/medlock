@@ -177,7 +177,7 @@ See [wrangler.jsonc](./wrangler.jsonc) for full configuration including:
 
 ### Reporting Security Issues
 
-Please email security@healthmcp.ai with details.
+Please open an issue or submit a pull request with details.
 
 ### Security Features
 
