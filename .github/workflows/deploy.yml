@@ -59,10 +59,10 @@ jobs:
       - name: Build Web App
         run: cd apps/web && yarn build:cloudflare
 
-      - name: Deploy Web to Cloudflare Pages
+      - name: Deploy Web to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           workingDirectory: apps/web
-          command: pages deploy .open-next --project-name=medlock-web
+          command: deploy -c wrangler.production.jsonc
           packageManager: yarn
