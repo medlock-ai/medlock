@@ -24,6 +24,7 @@ coverage
 
 # Ignore Wrangler files:
 .wrangler
+wrangler*.jsonc
 
 # Ignore Claude files:
 .claude
