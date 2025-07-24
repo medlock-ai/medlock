@@ -1,0 +1,21 @@
+tree fc7fb201f11d25afae912f326e2f60b2323c5525
+parent 24afb63b6891ca5757afb0d79a12e22249a29170
+author collinbentley1 <collin.bentley@me.com> 1753321336 -0400
+committer collinbentley1 <collin.bentley@me.com> 1753321336 -0400
+gpgsig -----BEGIN PGP SIGNATURE-----
+ 
+ iHUEABYKAB0WIQQ1JuI+NJWPPSaXIr267ILEQiBmxQUCaIGPeAAKCRC67ILEQiBm
+ xeccAQCDCYmRhjzeI8R6z1moxY0gdm8cPqMu5sN2yn7CpYJgJAD+P9ycjxDvw0KT
+ 6y0qBkuL9WWY8VPYHk3Ng25RMwZRTw0=
+ =a+Nl
+ -----END PGP SIGNATURE-----
+
+Replace all domain references with placeholders
+
+- Replace healthmcp.ai with your-domain.com
+- Replace medlock.ai with your-domain.com
+- Update all test files and configuration
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>

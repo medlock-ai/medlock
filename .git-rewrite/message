@@ -1,0 +1,9 @@
+Add security policy and restrict auto-merge
+
+- Create SECURITY.md with vulnerability reporting guidelines
+- Restrict auto-merge workflow to only Dependabot PRs
+- Protect open source project from automatic merges
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>

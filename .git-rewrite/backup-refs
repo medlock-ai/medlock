@@ -1,0 +1,14 @@
+b11a01861b0289cdc7aac4c1d58621fd9e8499bc commit	refs/heads/main
+720f600046f4d09293a7e3f73f502ba9ad9f1ecf commit	refs/remotes/origin/HEAD
+52f71f428f3b25babb0e26808e9c2c7d2fe6939b commit	refs/remotes/origin/codex/fix-green-highlight-on-ios-input
+bbba7ec0806459d71cbd11ff000eeb8eb535c987 commit	refs/remotes/origin/codex/fix-input-focus-box-and-animations
+cf60f63bb69599a6cae21b21576f9a3a9720ebca commit	refs/remotes/origin/codex/replace-healthmcp-with-medlock-in-frontend
+88ffabaad20bced75bcea366b5b35c43e898c0cf commit	refs/remotes/origin/codex/update-wrangler-file-for-custom-domain
+1c136b21f0ab4f586a95901d53148bbe4358d61a commit	refs/remotes/origin/dependabot/npm_and_yarn/main/development-dependencies-519aa20846
+58925f03df07bcb2fa99d5bcb817950510b757d7 commit	refs/remotes/origin/dependabot/npm_and_yarn/main/production-dependencies-69232f30d8
+7fa2ea96ede42d76c70d62bcc3e8c6b34c7138d8 commit	refs/remotes/origin/enable-auto-merge-all-prs
+8ac9cbdfb3b4f5586f162526e3e28e9c5fc09876 commit	refs/remotes/origin/feat/ios-app-healthkit-sync
+d200c09a90f02c5d4d2537908a76b6e83722aaa8 commit	refs/remotes/origin/fix-cloudflare-kv-context
+8e2e12787ac2142020972b50e8d059a642031239 commit	refs/remotes/origin/implement-tdd-homepage
+720f600046f4d09293a7e3f73f502ba9ad9f1ecf commit	refs/remotes/origin/main
+18028d9ca1294d986e13f710eeb94dde2b493cad commit	refs/remotes/origin/refactor/organize-monorepo-structure
