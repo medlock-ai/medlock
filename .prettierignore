@@ -24,3 +24,6 @@ coverage
 
 # Ignore Wrangler files:
 .wrangler
+
+# Ignore Claude files:
+.claude
