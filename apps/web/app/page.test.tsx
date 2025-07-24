@@ -324,6 +324,9 @@ describe('HomePage', () => {
 
       // Tab through interactive elements
       await user.tab()
+      expect(screen.getByRole('link', { name: /View Medlock on GitHub/i })).toHaveFocus()
+
+      await user.tab()
       expect(screen.getByRole('link', { name: /Reserve My Pod/i })).toHaveFocus()
 
       await user.tab()
