@@ -12,5 +12,6 @@
     "noEmit": true,
     "incremental": true
   },
-  "exclude": ["node_modules", "apps/**/*"]
+  "include": ["*.js", "*.mjs", "*.ts"],
+  "exclude": ["node_modules", "apps"]
 }
