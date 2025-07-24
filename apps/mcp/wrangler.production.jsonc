@@ -67,7 +67,7 @@
   "vars": {
     "MCP_VERSION": "v0.1.0",
     "ALLOWED_ORIGINS": "https://medlock.ai,https://chat.openai.com,https://claude.ai",
-    "SOLID_POD_DOMAIN": "storage.solidpod.com",
+    "SOLID_POD_DOMAIN": "storage.solidpod.com"
   },
 
   /**
@@ -76,14 +76,14 @@
   "dev": {
     "port": 8788,
     "local_protocol": "https",
-    "upstream_protocol": "https",
+    "upstream_protocol": "https"
   },
 
   /**
    * Observability
    */
   "observability": {
-    "enabled": true,
+    "enabled": true
   },
 
   /**
@@ -95,12 +95,12 @@
       "routes": [
         {
           "pattern": "api-staging.medlock.ai",
-          "custom_domain": true,
-        },
+          "custom_domain": true
+        }
       ],
       "vars": {
-        "MCP_VERSION": "v0.1.0-staging",
-      },
-    },
+        "MCP_VERSION": "v0.1.0-staging"
+      }
+    }
   },
 }
