@@ -98,7 +98,9 @@
       "WebFetch(domain:opennext.js.org)",
       "Bash(diff:*)",
       "WebFetch(domain:developers.cloudflare.com)",
-      "Bash(gh pr create:*)"
+      "Bash(gh pr create:*)",
+      "Bash(gh pr checkout:*)",
+      "Bash(gh pr diff:*)"
     ],
     "deny": []
   }

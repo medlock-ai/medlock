@@ -16,7 +16,7 @@ const spaceGrotesk = Space_Grotesk({
 export const metadata: Metadata = {
   title: 'Medlock • AI Insights, Data Still Yours',
   description:
-    'Unlock AI insights without unlocking your private health data. Medlock lets you team up your favourite AI model with your health records on your terms.',
+    'Unlock AI insights without unlocking your private health data. Medlock lets you team up your favorite AI model with your health records on your terms.',
 }
 
 export default function RootLayout({
