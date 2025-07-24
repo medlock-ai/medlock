@@ -113,12 +113,16 @@ yarn dev
 
 1. **Generate Cloudflare API Token**:
 ```bash
-# Option 1: Use wrangler to open token creation page
+# Option 1: Generate token with wrangler (opens browser)
 wrangler login
-wrangler whoami  # Verify authentication
+wrangler whoami  # Shows your account info
+
+# Create API token for CI/CD:
+npx wrangler generate-api-token --json
+# Copy the "apiToken" value from the output
 
 # Option 2: Create manually at https://dash.cloudflare.com/profile/api-tokens
-# Required permissions:
+# Click "Create Token" → "Custom token" with permissions:
 # - Account: Cloudflare Workers Scripts:Edit
 # - Zone: Workers Routes:Edit (for custom domains)
 ```
