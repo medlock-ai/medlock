@@ -26,9 +26,9 @@ jobs:
       - name: Upload MCP Secrets
         run: |
           cd apps/mcp
-          echo "${{ secrets.OAUTH_CLIENT_ID }}" | npx wrangler secret put OAUTH_CLIENT_ID --name medlock-mcp-server --env="" --no-interaction
-          echo "${{ secrets.OAUTH_CLIENT_SECRET }}" | npx wrangler secret put OAUTH_CLIENT_SECRET --name medlock-mcp-server --env="" --no-interaction
-          echo "${{ secrets.SOLID_SIGNING_KEY }}" | npx wrangler secret put SOLID_SIGNING_KEY --name medlock-mcp-server --env="" --no-interaction
+          echo "${{ secrets.OAUTH_CLIENT_ID }}" | npx wrangler secret put OAUTH_CLIENT_ID --name medlock-mcp-server
+          echo "${{ secrets.OAUTH_CLIENT_SECRET }}" | npx wrangler secret put OAUTH_CLIENT_SECRET --name medlock-mcp-server
+          echo "${{ secrets.SOLID_SIGNING_KEY }}" | npx wrangler secret put SOLID_SIGNING_KEY --name medlock-mcp-server
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
