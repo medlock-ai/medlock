@@ -92,7 +92,7 @@ describe('Authentication & Security', () => {
       )
 
       expect(response.status).toBe(302)
-      expect(response.headers.get('Location')).toBe('https://your-domain.com/auth/success')
+      expect(response.headers.get('Location')).toBe('https://medlock.ai/auth/success')
 
       // Verify secure session cookie was set
       const setCookie = response.headers.get('Set-Cookie')
