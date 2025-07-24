@@ -11,7 +11,7 @@ describe('Authentication & Security', () => {
   it('should have proper env bindings', () => {
     expect(env.TOKENS).toBeDefined()
     expect(env.AUDIT).toBeDefined()
-    expect(env.GITHUB_CLIENT_ID).toBe('test-client-id')
+    expect(env.OAUTH_CLIENT_ID).toBe('test-client-id')
   })
 
   it('test auth endpoint should return 401 without auth', async () => {
