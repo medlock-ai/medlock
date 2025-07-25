@@ -31,7 +31,7 @@ export const vitalsScan: Tool = {
     return {
       status: 'ready',
       instructions: `Please position your finger on the camera lens for ${params.duration || 30} seconds`,
-      scanUrl: `${context.env.BASE_URL || 'https://api.your-domain.com'}/scan/${params.vitalType}`,
+      scanUrl: `${context.env.BASE_URL || 'https://mcp.your-domain.com'}/scan/${params.vitalType}`,
       mockResult: {
         value: params.vitalType === 'heart_rate' ? 72 : 16,
         unit: params.vitalType === 'heart_rate' ? 'bpm' : 'breaths/min',

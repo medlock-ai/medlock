@@ -56,7 +56,7 @@
    */
   "routes": [
     {
-      "pattern": "api.medlock.ai",
+      "pattern": "mcp.medlock.ai",
       "custom_domain": true
     }
   ],
@@ -94,7 +94,7 @@
       "name": "medlock-mcp-staging",
       "routes": [
         {
-          "pattern": "api-staging.medlock.ai",
+          "pattern": "mcp-staging.medlock.ai",
           "custom_domain": true
         }
       ],

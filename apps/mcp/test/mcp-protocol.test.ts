@@ -41,7 +41,7 @@ describe('MCP Protocol Implementation', () => {
   // Helper to initialize MCP session
   async function initializeMcpSession(): Promise<string> {
     const response = await worker.fetch(
-      new Request('https://api.your-domain.com/api/mcp', {
+      new Request('https://mcp.your-domain.com/api/mcp', {
         method: 'POST',
         headers: {
           Cookie: `hc_session=${sessionId}`,
@@ -102,7 +102,7 @@ describe('MCP Protocol Implementation', () => {
   describe('JSON-RPC 2.0 Protocol', () => {
     it('should handle JSON-RPC requests via POST endpoint', async () => {
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -151,7 +151,7 @@ describe('MCP Protocol Implementation', () => {
 
     it('should validate JSON-RPC request format', async () => {
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -185,7 +185,7 @@ describe('MCP Protocol Implementation', () => {
       mcpSessionId = await initializeMcpSession()
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -228,7 +228,7 @@ describe('MCP Protocol Implementation', () => {
       mcpSessionId = await initializeMcpSession()
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -263,7 +263,7 @@ describe('MCP Protocol Implementation', () => {
       mcpSessionId = await initializeMcpSession()
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -320,7 +320,7 @@ describe('MCP Protocol Implementation', () => {
       mcpSessionId = await initializeMcpSession()
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,

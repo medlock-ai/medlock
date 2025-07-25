@@ -16,7 +16,7 @@ describe('Authentication & Security', () => {
 
   it('test auth endpoint should return 401 without auth', async () => {
     const response = await worker.fetch(
-      new Request('https://api.your-domain.com/test-auth'),
+      new Request('https://mcp.your-domain.com/test-auth'),
       env,
       createExecutionContext()
     )
@@ -33,7 +33,7 @@ describe('Authentication & Security', () => {
     it('should redirect to GitHub OAuth when accessing protected endpoints without auth', async () => {
       try {
         const response = await worker.fetch(
-          new Request('https://api.your-domain.com/api/mcp', {
+          new Request('https://mcp.your-domain.com/api/mcp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ jsonrpc: '2.0', method: 'initialize', id: 1 }),
@@ -86,7 +86,7 @@ describe('Authentication & Security', () => {
       })
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/auth/callback?code=test-code&state=test-state'),
+        new Request('https://mcp.your-domain.com/auth/callback?code=test-code&state=test-state'),
         env,
         createExecutionContext()
       )
@@ -105,7 +105,7 @@ describe('Authentication & Security', () => {
 
     it('should validate OAuth state parameter to prevent CSRF', async () => {
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/auth/callback?code=test-code&state=invalid-state'),
+        new Request('https://mcp.your-domain.com/auth/callback?code=test-code&state=invalid-state'),
         env,
         createExecutionContext()
       )
@@ -125,7 +125,7 @@ describe('Authentication & Security', () => {
       global.fetch = vi.fn().mockRejectedValue(new Error('GitHub API error'))
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/auth/callback?code=test-code&state=test-state'),
+        new Request('https://mcp.your-domain.com/auth/callback?code=test-code&state=test-state'),
         env,
         createExecutionContext()
       )
@@ -150,7 +150,7 @@ describe('Authentication & Security', () => {
       )
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${expiredSessionId}`,
@@ -173,7 +173,7 @@ describe('Authentication & Security', () => {
   describe('Session Security', () => {
     it('should validate session cookie format and signature', async () => {
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: 'hc_session=invalid-format',
@@ -190,7 +190,7 @@ describe('Authentication & Security', () => {
 
     it('should implement secure headers', async () => {
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/health'),
+        new Request('https://mcp.your-domain.com/health'),
         env,
         createExecutionContext()
       )
@@ -206,7 +206,7 @@ describe('Authentication & Security', () => {
       // CORS middleware doesn't block requests, it just doesn't set CORS headers for disallowed origins
       // This test should check that CORS headers are not set for evil.com
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/health', {
+        new Request('https://mcp.your-domain.com/api/health', {
           method: 'GET',
           headers: {
             Origin: 'https://evil.com',
@@ -239,7 +239,7 @@ describe('Authentication & Security', () => {
       )
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/test-auth', {
+        new Request('https://mcp.your-domain.com/test-auth', {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${apiKeySessionId}`,

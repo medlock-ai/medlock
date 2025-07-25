@@ -72,7 +72,7 @@ wrangler kv namespace create WAITLIST_KV
 5. **Create GitHub OAuth App** ([github.com/settings/developers](https://github.com/settings/developers)):
 
 - Homepage: `https://your-domain.com`
-- Callback: `https://api.your-domain.com/auth/callback`
+- Callback: `https://mcp.your-domain.com/auth/callback`
 
 6. **Generate secure signing key**:
 

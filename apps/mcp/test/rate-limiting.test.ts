@@ -32,7 +32,7 @@ describe('Rate Limiting & Billing', () => {
       for (let i = 0; i < 5; i++) {
         requests.push(
           worker.fetch(
-            new Request('https://api.your-domain.com/api/mcp', {
+            new Request('https://mcp.your-domain.com/api/mcp', {
               method: 'POST',
               headers: {
                 Cookie: `hc_session=${sessionId}`,
@@ -108,7 +108,7 @@ describe('Rate Limiting & Billing', () => {
       for (let i = 0; i < 4; i++) {
         user1Requests.push(
           worker.fetch(
-            new Request('https://api.your-domain.com/api/mcp', {
+            new Request('https://mcp.your-domain.com/api/mcp', {
               method: 'POST',
               headers: {
                 Cookie: `hc_session=${user1SessionId}`,
@@ -145,7 +145,7 @@ describe('Rate Limiting & Billing', () => {
       for (let i = 0; i < 3; i++) {
         user2Requests.push(
           worker.fetch(
-            new Request('https://api.your-domain.com/api/mcp', {
+            new Request('https://mcp.your-domain.com/api/mcp', {
               method: 'POST',
               headers: {
                 Cookie: `hc_session=${user2SessionId}`,
@@ -182,7 +182,7 @@ describe('Rate Limiting & Billing', () => {
       const responses = []
       for (let i = 0; i < 4; i++) {
         const response = await worker.fetch(
-          new Request('https://api.your-domain.com/api/mcp', {
+          new Request('https://mcp.your-domain.com/api/mcp', {
             method: 'POST',
             headers: {
               Cookie: `hc_session=${sessionId}`,
@@ -232,7 +232,7 @@ describe('Rate Limiting & Billing', () => {
       // We can't easily simulate a Durable Object failure in the test environment,
       // but we can verify that requests go through when rate limiting is working
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -261,7 +261,7 @@ describe('Rate Limiting & Billing', () => {
   describe('Rate Limit Headers', () => {
     it('should include rate limit headers in responses', async () => {
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -300,7 +300,7 @@ describe('Rate Limiting & Billing', () => {
       for (let i = 0; i < 5; i++) {
         requests.push(
           worker.fetch(
-            new Request('https://api.your-domain.com/api/mcp', {
+            new Request('https://mcp.your-domain.com/api/mcp', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
