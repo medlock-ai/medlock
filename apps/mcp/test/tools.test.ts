@@ -41,7 +41,7 @@ describe('Tools Implementation', () => {
   // Helper to initialize MCP session
   async function initializeMcpSession(): Promise<string> {
     const response = await worker.fetch(
-      new Request('https://api.your-domain.com/api/mcp', {
+      new Request('https://mcp.your-domain.com/api/mcp', {
         method: 'POST',
         headers: {
           Cookie: `hc_session=${sessionId}`,
@@ -104,7 +104,7 @@ describe('Tools Implementation', () => {
       mcpSessionId = await initializeMcpSession()
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -144,7 +144,7 @@ describe('Tools Implementation', () => {
       mcpSessionId = await initializeMcpSession()
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -182,7 +182,7 @@ describe('Tools Implementation', () => {
       mcpSessionId = await initializeMcpSession()
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -232,7 +232,7 @@ describe('Tools Implementation', () => {
       mcpSessionId = await initializeMcpSession()
 
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -268,7 +268,7 @@ describe('Tools Implementation', () => {
 
       // Execute a tool
       await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             Cookie: `hc_session=${sessionId}`,
@@ -320,7 +320,7 @@ describe('Tools Implementation', () => {
   describe('Tool Security', () => {
     it('should require authentication for tool execution', async () => {
       const response = await worker.fetch(
-        new Request('https://api.your-domain.com/api/mcp', {
+        new Request('https://mcp.your-domain.com/api/mcp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -352,7 +352,7 @@ describe('Tools Implementation', () => {
       for (let i = 0; i < 5; i++) {
         requests.push(
           worker.fetch(
-            new Request('https://api.your-domain.com/api/mcp', {
+            new Request('https://mcp.your-domain.com/api/mcp', {
               method: 'POST',
               headers: {
                 Cookie: `hc_session=${sessionId}`,

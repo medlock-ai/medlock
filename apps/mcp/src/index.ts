@@ -80,7 +80,7 @@ app.get('/test-auth', authMiddleware, (c) => {
 const getGitHubAuthUrl = (env: Bindings, state: string) => {
   const params = new URLSearchParams({
     client_id: env.OAUTH_CLIENT_ID,
-    redirect_uri: `${env.BASE_URL || 'https://api.medlock.ai'}/auth/callback`,
+    redirect_uri: `${env.BASE_URL || 'https://mcp.medlock.ai'}/auth/callback`,
     scope: 'user:email',
     state: state,
   })
