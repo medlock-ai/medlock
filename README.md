@@ -87,13 +87,13 @@ The same probe runs in CI as a contract test: `test/initialize-probe.test.ts` st
 
 ## Local Development
 
-Medlock requires Bun `1.4.0` at the exact reviewed revision
-`34cbb9a40b4bd1bd767d134a7065e66c2432a676`, matching CI and the production
+Medlock requires Bun `1.4.2` at the exact reviewed revision
+`744846f844374847c902b5e7fd59b4342a51ef99`, matching CI and the production
 container. Before installing dependencies or running a repository script, fail
 closed on the full embedded revision:
 
 ```sh
-bun -e 'if (Bun.version !== "1.4.0" || Bun.revision !== "34cbb9a40b4bd1bd767d134a7065e66c2432a676") throw new Error("Bun must be 1.4.0+34cbb9a40")'
+bun -e 'if (Bun.version !== "1.4.2" || Bun.revision !== "744846f844374847c902b5e7fd59b4342a51ef99") throw new Error("Bun must be 1.4.2+744846f84")'
 bun install
 bun run dev
 ```
@@ -101,7 +101,7 @@ bun run dev
 Never install or upgrade Bun from a moving `stable`, `latest`, or `canary`
 channel for this repository. `bun --revision` is a convenient display check,
 but it abbreviates the commit; the assertion above is the canonical local
-check. The Docker image pins `bun-v1.4.0` exactly.
+check. The Docker image pins `bun-v1.4.2` exactly.
 
 Useful commands:
 
@@ -161,7 +161,7 @@ The repository follows the shared platform contract:
 - `.github/workflows/deploy-preview.yml`: tagged pull request traffic on the single no-data `medlock-preview` service
 - `.github/workflows/reconcile-previews.yml`: exact-revision cleanup and reconciliation for shared preview traffic
 
-Every caller and Terraform mirror pins the same reviewed full platform SHA. Authenticated infrastructure work checks out only that platform commit and selects the immutable platform-owned deployment configuration by numeric GitHub repository ID; it never executes consumer HCL. Bootstrap, production, and public-exposure changes must run through the owner-controlled, review-gated pipeline against `platform/terraform/deployments`, not a manual apply from this repository. Actions may be enabled only after that pipeline, its state migration, exact-SHA WIF, and SHA-only enforcement are verified. See the [pinned security rollout](https://github.com/collinbentley1/platform/blob/52cb2dea765ead93f204ee4a5bd884b9fbb0f13a/docs/security-rollout.md).
+Every caller and Terraform mirror pins the same reviewed full platform SHA. Authenticated infrastructure work checks out only that platform commit and selects the immutable platform-owned deployment configuration by numeric GitHub repository ID; it never executes consumer HCL. Bootstrap, production, and public-exposure changes must run through the owner-controlled, review-gated pipeline against `platform/terraform/deployments`, not a manual apply from this repository. Actions may be enabled only after that pipeline, its state migration, exact-SHA WIF, and SHA-only enforcement are verified. See the [pinned security rollout](https://github.com/collinbentley1/platform/blob/a831d374f18e91e44fa357fb7e1a8368103835a4/docs/security-rollout.md).
 
 Do not define `GCP_*` repository variables or repository-level deploy secrets.
 The sole credential-bearing build environment is
