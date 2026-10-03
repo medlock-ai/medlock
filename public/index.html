@@ -3,17 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Medlock. Personal health data for AI. Join the early-access waitlist." />
+    <meta name="description" content="Medlock. Private health sharing with AI, coming soon. Join the early-access waitlist." />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Medlock" />
-    <meta property="og:title" content="Medlock — your health, on your terms" />
-    <meta property="og:description" content="Personal health data for AI. Join the early-access waitlist." />
+    <meta property="og:title" content="Medlock — privately share your health info" />
+    <meta property="og:description" content="Private health sharing with AI, coming soon. Join the early-access waitlist." />
     <meta property="og:url" content="https://medlock.ai/" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Medlock — your health, on your terms" />
+    <meta name="twitter:title" content="Medlock — privately share your health info" />
     <title>Medlock</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="/assets/styles.css?v=3" />
+    <link rel="stylesheet" href="/assets/styles.css?v=4" />
     <script type="module" src="/assets/client.js?v=3"></script>
   </head>
   <body>
@@ -27,8 +27,14 @@
     </header>
     <main class="home" id="main">
       <section class="hero" aria-labelledby="hero-title">
-        <p class="eyebrow">Personal health data for AI</p>
-        <h1 id="hero-title">Your health.<br /><span>On your terms.</span></h1>
+        <p class="eyebrow" id="hero-status">Coming soon</p>
+        <h1 id="hero-title" aria-describedby="hero-status">Privately share<br /><span>your health info</span></h1>
+        <p class="hero-clients">
+          <span>with</span>
+          <span class="client-name"><img src="/assets/claude.svg" width="32" height="32" alt="" /><span>Claude</span></span>
+          <span class="client-and">and</span>
+          <span class="client-name"><img src="/assets/openai.svg" width="32" height="32" alt="" /><span>ChatGPT</span></span>
+        </p>
         <form class="waitlist-form" data-waitlist-form>
           <label for="email">Join the waitlist</label>
           <div class="input-row">
@@ -50,7 +56,7 @@
               <button class="quiet-button" type="button" data-copy-endpoint>Copy URL</button>
             </div>
             <p class="form-status" data-copy-status role="status" aria-live="polite"></p>
-            <p>Streamable HTTP. Sample data only; no personal health records are connected.</p>
+            <p>Custom MCP connection: Claude or ChatGPT developer mode. Sample data only; no personal health records are connected.</p>
             <p class="fine-print">Not medical advice. Camera vitals scanning is unavailable.</p>
           </div>
         </details>
